@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40">
+ <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
+  <Version>11.9999</Version>
+ </DocumentProperties>
+ <ExcelWorkbook xmlns="urn:schemas-microsoft-com:office:excel">
+  <WindowHeight>10005</WindowHeight>
+  <WindowWidth>10005</WindowWidth>
+  <WindowTopX>120</WindowTopX>
+  <WindowTopY>135</WindowTopY>
+  <ProtectStructure>False</ProtectStructure>
+  <ProtectWindows>False</ProtectWindows>
+ </ExcelWorkbook>
+ <Styles>
+  <Style ss:ID="Default" ss:Name="Normal">
+   <Alignment ss:Vertical="Center"/>
+   <Borders/>
+   <Font ss:FontName="宋体" x:CharSet="134" ss:Size="12"/>
+   <Interior/>
+   <NumberFormat/>
+   <Protection/>
+  </Style>
+  <Style ss:ID="s21">
+   <NumberFormat ss:Format="@"/>
+  </Style>
+ </Styles>
+ <Worksheet ss:Name="用户模板">
+  <Table ss:ExpandedColumnCount="12" ss:ExpandedRowCount="1" x:FullColumns="1"
+   x:FullRows="1" ss:DefaultColumnWidth="54" ss:DefaultRowHeight="14.25">
+   <Column ss:Index="9" ss:StyleID="s21" ss:Width="76.5"/>
+   <Column ss:Index="11" ss:AutoFitWidth="0" ss:Width="168"/>
+   <Column ss:StyleID="s21" ss:AutoFitWidth="0" ss:Width="181.5"/>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">所属部门</Data></Cell>
+    <Cell><Data ss:Type="String">区域</Data></Cell>
+    <Cell><Data ss:Type="String">所属局站</Data></Cell>
+    <Cell><Data ss:Type="String">用户名字</Data></Cell>
+    <Cell><Data ss:Type="String">密码</Data></Cell>
+    <Cell><Data ss:Type="String">姓名</Data></Cell>
+    <Cell><Data ss:Type="String">性别</Data></Cell>
+    <Cell><Data ss:Type="String">用户角色</Data></Cell>
+    <Cell><Data ss:Type="String">手机号码</Data></Cell>
+    <Cell><Data ss:Type="String">邮箱</Data></Cell>
+    <Cell><Data ss:Type="String">激活状态-1为激活0为未激活</Data></Cell>
+    <Cell><Data ss:Type="String">门禁卡号-请输入数字最大10位</Data></Cell>
+   </Row>
+  </Table>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <Unsynced/>
+   <Print>
+    <ValidPrinterInfo/>
+    <PaperSizeIndex>9</PaperSizeIndex>
+    <HorizontalResolution>600</HorizontalResolution>
+    <VerticalResolution>600</VerticalResolution>
+   </Print>
+   <Selected/>
+   <Panes>
+    <Pane>
+     <Number>3</Number>
+     <ActiveRow>6</ActiveRow>
+     <ActiveCol>11</ActiveCol>
+    </Pane>
+   </Panes>
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+  <Sorting xmlns="urn:schemas-microsoft-com:office:excel">
+   <Sort>手机号码</Sort>
+  </Sorting>
+ </Worksheet>
+</Workbook>

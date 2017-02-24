@@ -1,0 +1,7 @@
+<FilesMatch "^(announce)$">
+        ForceType application/x-httpd-php
+</FilesMatch>
+RewriteEngine on
+RewriteBase /
+RewriteCond $1 !^(index\.php|public|captcha|user_papers|portal_images|editor_images|editor_thumb|uploaded/|robots\.txt|user_image/|index_image/|certificate_image/|app_download|attachments|filemanager|excel_templates)
+RewriteRule ^(.*)$ index.php/$1 [L]
