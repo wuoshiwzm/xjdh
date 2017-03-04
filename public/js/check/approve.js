@@ -1,6 +1,8 @@
 /**
  * Created by jim on 2017/2/22.
  */
+
+//跳转审核页面
 $(".approve").bind("click", function () {
     $res = $(this).parent().find($("input")).val();
     layer.open({
@@ -8,10 +10,24 @@ $(".approve").bind("click", function () {
         area: ["900px", "550px"],
         fixed: false, //不固定
         maxmin: true,
-        content: "/check/check/approve/" + $res,
+        content: "/check/approve/" + $res,
     });
 });
 
+//跳转编辑安排页面
+$(".editArrange").bind("click", function () {
+
+    $res = $(this).parent().find($("input")).val();
+    layer.open({
+        type: 2,
+        area: ["900px", "550px"],
+        fixed: false, //不固定
+        maxmin: true,
+        content: "/check/editArrange/" + $res,
+    });
+});
+
+//
 $(".approveImg").bind("click", function () {
     $res = $(this).parent().find($("input")).val();
 

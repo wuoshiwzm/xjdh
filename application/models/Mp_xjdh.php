@@ -4673,6 +4673,47 @@ class MP_Xjdh extends CI_Model
     	$dbObj->select('id');
     	return $dbObj->get('user')->row();
     }
+
+    function get_user_fullname($id){
+        $dbObj = $this->load->database('default', TRUE);
+        $dbObj->where('id',$id);
+        $dbObj->select('full_name');
+        return $dbObj->get('user')->row()->full_name;
+    }
+
+    function getArrangeByID($arrangeID){
+        $dbObj = $this->load->database('default', TRUE);
+        $dbObj->where('id',$arrangeID);
+        return $arrange = $dbObj->get('check_arrange')->row();
+    }
+
+    /**
+     * @param null $arrangeID
+     * @param null $userID
+     * @param null $substationID
+     * @param null $status
+     * 获取安排信息
+     */
+    function getArrange($arrangeID=NULL,$userID=NULL,$substationID=NULL,$status=NULL){
+        $dbObj = $this->load->database('default', TRUE);
+
+        if(!is_null($arrangeID) && !is_null($userID) && !is_null($substationID) && !is_null($status)){
+            $dbObj->where('id',$arrangeID);
+            return $res = $dbObj->get('check_arrange')->row();
+        }else{
+            if(!is_null($substationID)){
+                $dbObj->where('substaion_id',$substationID);
+            }
+            if(!is_null($userID)){
+                $dbObj->where('user_id',$userID);
+            }
+            if(!is_null($status)){
+                $dbObj->where('status',$status);
+            }
+        }
+        $res = $dbObj->get('check_arrange')->result();
+        return $res;
+    }
     
     
     

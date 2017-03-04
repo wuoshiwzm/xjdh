@@ -5,13 +5,19 @@
 				<div class="primary-head">
 					<h3 class="page-header">管理面板</h3>
 					<ul class="breadcrumb">
-						<li><a class="icon-home" href="/"></a> <span class="divider"><i
+						<li>
+                            <a class="icon-home" href="/"></a> <span class="divider"><i
 								class="icon-angle-right"></i></span></li>
 						<?php foreach ($bcList as $bcObj){?>
 						<?php if($bcObj->isLast){?>	
-						<li class="active"><?php echo htmlentities($bcObj->title,ENT_COMPAT,"UTF-8");?></li>
+						<li class="active">
+                            <?php echo htmlentities($bcObj->title,ENT_COMPAT,"UTF-8");?>
+                        </li>
 						<?php }else {?>
-						<li><a href='<?php echo htmlentities($bcObj->url,ENT_COMPAT,"UTF-8");?>'><?php echo htmlentities($bcObj->title,ENT_COMPAT,"UTF-8");?></a>
+						<li>
+                            <a href='<?php echo htmlentities($bcObj->url,ENT_COMPAT,"UTF-8");?>'>
+                                <?php echo htmlentities($bcObj->title,ENT_COMPAT,"UTF-8");?>
+                            </a>
 							<span class="divider"><i class="icon-angle-right"></i></span></li>
 						<?php }?>
 						<?php }?>
@@ -45,7 +51,8 @@
 							</tr>
 						</thead>
 						<tbody>
-				          <?php $i=1; $piSettings = json_decode($roomObj->pi_setting,true); if(count($piSettings)){foreach ($piSettings as $piObj){?>
+				          <?php $i=1; $piSettings = json_decode($roomObj->pi_setting,true); if(count($piSettings))
+				          {foreach ($piSettings as $piObj){?>
 				          <tr>
 								<td class='center'><?php echo $i++;?></td>
 								<td class='center'><?php $keys = array_keys($piObj); echo $keys[0];?></td>

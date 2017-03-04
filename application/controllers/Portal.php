@@ -5220,6 +5220,7 @@ class Portal extends CI_Controller
 
     function usermanage ()
     {
+
         $data = array();
         $data['userObj'] = $this->userObj;
         $data['gCity'] = Defines::$gCity;
@@ -7799,9 +7800,9 @@ class Portal extends CI_Controller
     		$city_code = $this->userObj->city_code;
     	}
     	$data['offset'] = $offset = intval($this->input->get('per_page'));
-    	//$data['count'] = $count = $this->mp_xjdh->Get_SubstationGatherCount();
+//      $data['count'] = $count = $this->mp_xjdh->Get_SubstationGatherCount();
 //     	if($selCity)
-//     		$dbObj->where('city_code',$selCity);
+//     	$dbObj->where('city_code',$selCity);
     	$data['substationGather'] = $substationGather= $this->mp_xjdh->Get_station($txtName, $selCity, $selCounty, $city_code,$offset, 20);
     	$counts = $this->mp_xjdh->Get_station_count($txtName, $selCity, $selCounty, $city_code);
     	$substationList = array();

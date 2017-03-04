@@ -34,12 +34,9 @@
                             <thead>
                             <tr>
                                 <th>序号</th>
-                                <th>分公司</th>
-                                <th>区域</th>
                                 <th>局站</th>
-                                <th>申请人</th>
-                                <th>审核状态</th>
-                                <th>操作</th>
+                                <th>验收人</th>
+
 
 
                             </tr>
