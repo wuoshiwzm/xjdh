@@ -112,15 +112,16 @@
                                     <td>
                                         <?php echo $room['room_name']; ?>
                                     </td>
-                                    <?php foreach ($room['data_pics'] as $pic) { ?>
-                                        <td>
-                                            <input type="hidden" class="img_path"
-                                                   value="/public/portal/Check_image/<?php echo $pic ?>">
-                                            <img src="/public/portal/Check_image/<?php echo $pic ?>"
-                                                 style="height: 150px;"
-                                                 class="approveImg">
-                                        </td>
-                                    <?php } ?>
+                                    <td> <ul class="dowebokList">
+                                            <?php foreach ($room['data_pics']as $k=>$img) { ?><a
+                                                <?php if($k>=3){echo "style='display:none'";}?>
+                                                rel="group" class="image"
+                                                href="/public/portal/Check_image/<?php echo $img ?>">
+                                                <img src="/public/portal/Check_image/<?php echo $img ?>"
+                                                     alt="" style="height: 150px;"/></a>
+                                            <?php } ?>
+                                        </ul>
+                                    </td>
                                 </tr>
                             <?php } ?>
                             <?php } ?>

@@ -37,7 +37,6 @@
         <?php } ?>
 
 
-
         <div class="row-fluid">
             <div class="span12">
 
@@ -119,15 +118,24 @@
                                         <td><?php echo $case['question']->content; ?></td>
                                         <td><?php echo $case['question']->desc; ?></td>
 
-                                        <?php foreach ($case['answer'] as $img) { ?>
-                                            <td>
-                                                <input type="hidden" class="img_path"
-                                                       value="/public/portal/Check_image/<?php echo $img ?>">
-                                                <img src="/public/portal/Check_image/<?php echo $img ?>"
-                                                     style="height: 150px;"
-                                                     class="approveImg">
-                                            </td>
-                                        <?php } ?>
+                                        <td> <ul class="dowebokList">
+                                            <?php foreach ($case['answer'] as $k=>$img) { ?><a
+                                                            <?php if($k>=3){echo "style='display:none'";}?>
+                                                            rel="group" class="image"
+                                                       href="/public/portal/Check_image/<?php echo $img ?>">
+                                                        <img src="/public/portal/Check_image/<?php echo $img ?>"
+                                                             alt="" style="height: 150px;"/></a>
+
+
+<!--                                                    <input type="hidden" class="img_path"-->
+<!--                                                           value="/public/portal/Check_image/--><?php //echo $img ?><!--">-->
+<!--                                                    <img src="/public/portal/Check_image/--><?php //echo $img ?><!--"-->
+<!--                                                         style="height: 150px;"-->
+<!--                                                         class="approveImg">-->
+
+                                            <?php } ?>
+                                            </ul>
+                                        </td>
 
                                     </tr>
                                 <?php } ?>

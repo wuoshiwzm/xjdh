@@ -1469,6 +1469,184 @@ class Api extends CI_Controller
         $res = $dbObj->get('check_device')->result();
         return $res;
     }
+
+    //------------------------------修改系统------------------------------------------//
+
+
+    /**
+     * @param $userID
+     * @param $type 1:工艺- 2：设备
+     * @param $locationType 1:局站- 2：机房
+     * 获取用户已经提交的局站
+     *
+     */
+    public function getEditSubs($userID,$type,$locationType)
+    {
+        $dbObj = $this->loadd->database('default',TRUE);
+        $userID = is_null($this->input->get("userID")) ? null : $this->input->get("userID");
+        $type = is_null($this->input->get("type")) ? null : $this->input->get("type");
+        $locationType = is_null($this->input->get("locationType")) ? null : $this->input->get("locationType");
+
+        //工艺 - 获取局站
+        if(($type == 1) && ($locationType ==1)){
+            $dbObj->from('check_apply');
+            $dbObj->join('substation', 'check_apply.substation_id = substation.id');
+            $dbObj->where('user_id',$userID);
+
+            $dbObj->select(
+                '
+            substation.id as substation_id,
+            substation.name as substation_name,
+            '
+            );
+            $res =  $dbObj->get()->result();
+
+            $jsonRet['ret'] = 0;
+            $jsonRet['data'] = json_encode(['subsList' => $res]);
+            echo json_encode($jsonRet);
+            return;
+        }
+
+        //设备 - 获取局站
+        if(($type == 2) && ($locationType ==1)){
+            $dbObj->from('check_device');
+            $dbObj->join('substation', 'check_device.substation_id = substation.id');
+            $dbObj->where('user_id',$userID);
+
+            $dbObj->select(
+                '
+            substation.id as substation_id,
+            substation.name as substation_name,
+            '
+            );
+            $res =  $dbObj->get()->result();
+
+            $jsonRet['ret'] = 0;
+            $jsonRet['data'] = json_encode(['subsDevList' => $res]);
+            echo json_encode($jsonRet);
+            return;
+        }
+
+        //设备 - 获取机房
+        //设备 - 获取局站
+        if(($type == 2) && ($locationType ==1)){
+            $dbObj->from('check_device');
+            $dbObj->join('room', 'check_device.room_id = room.id');
+            $dbObj->where('user_id',$userID);
+
+            $dbObj->select(
+                '
+            room.id as room_id,
+            room.name as room_name,
+            '
+            );
+            $res =  $dbObj->get()->result();
+
+            $jsonRet['ret'] = 0;
+            $jsonRet['data'] = json_encode(['roomsList' => $res]);
+            echo json_encode($jsonRet);
+            return;
+        }
+
+    }
+
+    /**
+     * @param $type 1:工艺 2：设备
+     * @param $id 工艺对应局站id 设备对应机房id
+     * 获取用户已经提交的问题 对应局站(工艺)或机房(设备)
+     */
+    public function getEditQuestions($type,$id)
+    {
+        $dbObj = $this->loadd->database('default',TRUE);
+        $type = is_null($this->input->get("type")) ? null : $this->input->get("type");
+        $id = is_null($this->input->get("id")) ? null : $this->input->get("id");
+
+        //工艺
+        if($type == 1){
+        $dbObj->where('substation_id',$id);
+        $dbObj->select('content');
+        $res = $dbObj->get('check_apply')->row();
+
+            $jsonRet['ret'] = 0;
+            $jsonRet['data'] = json_encode(['subContentList' => $res]);
+            echo json_encode($jsonRet);
+            return;
+        }
+
+        //设备
+        if($type == 2){
+            $dbObj->where('room_id',$id);
+            $dbObj->select('content');
+            $res = $dbObj->get('check_apply')->row();
+
+            $jsonRet['ret'] = 0;
+            $jsonRet['data'] = json_encode(['subContentList' => $res]);
+            echo json_encode($jsonRet);
+            return;
+
+        }
+
+
+    }
+
+    /**
+     * @param $type 1:工艺 2:设备
+     * @param $id 工艺对应局站 设备对应机房
+     * @param $questionID
+     * 更新提交内容
+     */
+    public function editQuestion($type, $id, $questionID)
+    {
+
+        $questionID = $this->input->post("questionID");
+        $id = $this->input->post("id");
+        $type = $this->input->post("type");
+
+
+        $dbObj = $this->load->database('default', TRUE);
+        //存储文件
+        $file_path = "./public/portal/Check_image/";
+        $fileName = $_FILES['uploadImg']['name'];
+        $fileTempName = $_FILES['uploadImg']['tmp_name'];
+        //图片上传
+        for ($i = 0; $i < count($fileName); $i++) {
+            move_uploaded_file($fileTempName[$i], $file_path . $fileName[$i]);
+        }
+        //文件过大
+        if ($fileTempName['size'] > "500000") {
+            $jsonRet['ret'] = 1;
+            $jsonRet['data'] = '';
+            echo json_encode('文件过大');
+            return;
+        }
+
+        if($type ==1){
+            $subID = $this->input->post("id");
+            $table = 'check_apply';
+            $search = 'substations_id';
+        }elseif($type == 2){
+            $roomID = $this->input->post("id");
+            $table = 'check_device';
+            $search = 'room_id';
+        }
+
+
+        $dbObj->where($search, $id);
+        $res = $dbObj->get($table)->row_array();
+        $applyContent = json_decode($res['content'], true);
+        $applyContent[$questionID] = $fileName;
+
+        $dbObj->where($search, $id);
+        $dbObj->set('content', json_encode($applyContent));
+        $dbObj->update($table);
+
+        $jsonRet['ret'] = 0;
+        $jsonRet['data'] = '更新完成';
+        echo json_encode($jsonRet);
+        return;
+    }
+
+
 }
 
 ?>

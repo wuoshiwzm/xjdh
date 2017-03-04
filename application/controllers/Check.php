@@ -127,6 +127,20 @@ class Check extends CI_Controller
 
         $data['info'] = $this->getInfo($subID);
         $scriptExtra = '';
+
+        $scriptExtra .= '<link rel="stylesheet" href="/public/css/easydialog.css"/>';
+        $scriptExtra .= '<script type="text/javascript" src="/public/portal/js/station_image_manage.js"></script>';
+        $scriptExtra .= '<script type="text/javascript" src="/public/portal/js/easydialog.js"></script>';
+        $scriptExtra .= '<script type="text/javascript" src="/public/portal/js/substation.js"></script>';
+
+        $scriptExtra .= '<link rel="stylesheet" href="/public/css/minimalist.css"/>';
+        $scriptExtra .= '<link rel="stylesheet" href="/public/css/jquery.fancybox.css"/>';
+        $scriptExtra .= '<script type="text/javascript" src="/public/js/flowplayer.min.js"></script>';
+        $scriptExtra .= '<script type="text/javascript" src="/public/js/flowplayer.hlsjs.min.js"></script>';
+        $scriptExtra .= '<script type="text/javascript" src="/public/js/jquery.fancybox.js"></script>';
+        $scriptExtra .= '<script type="text/javascript" src="/public/portal/js/player.js"></script>';
+
+        $scriptExtra .= '<script type="text/javascript" src="/public/portal/js/jqthumb.js"></script>';
 //        $scriptExtra = '<script src="/public/layer/layer.js"></script>';
 //        $scriptExtra .= '<script src="/public/js/check/approve.js"></script>';
         $content = $this->load->view("check/approveSub", $data, TRUE);
@@ -168,8 +182,6 @@ class Check extends CI_Controller
             foreach ($res as $r) {
                 //获取设备验收内容
                 $contents = json_decode($r->content);
-
-
                 foreach ($contents as $key => $content) {
                     array_push($data['cases'], [
                         'data_id' => $key,
@@ -184,6 +196,20 @@ class Check extends CI_Controller
 
         $data['info'] = $this->getInfo($subID);
         $scriptExtra = '';
+
+        $scriptExtra .= '<link rel="stylesheet" href="/public/css/easydialog.css"/>';
+        $scriptExtra .= '<script type="text/javascript" src="/public/portal/js/station_image_manage.js"></script>';
+        $scriptExtra .= '<script type="text/javascript" src="/public/portal/js/easydialog.js"></script>';
+        $scriptExtra .= '<script type="text/javascript" src="/public/portal/js/substation.js"></script>';
+
+        $scriptExtra .= '<link rel="stylesheet" href="/public/css/minimalist.css"/>';
+        $scriptExtra .= '<link rel="stylesheet" href="/public/css/jquery.fancybox.css"/>';
+        $scriptExtra .= '<script type="text/javascript" src="/public/js/flowplayer.min.js"></script>';
+        $scriptExtra .= '<script type="text/javascript" src="/public/js/flowplayer.hlsjs.min.js"></script>';
+        $scriptExtra .= '<script type="text/javascript" src="/public/js/jquery.fancybox.js"></script>';
+        $scriptExtra .= '<script type="text/javascript" src="/public/portal/js/player.js"></script>';
+
+        $scriptExtra .= '<script type="text/javascript" src="/public/portal/js/jqthumb.js"></script>';
 //        $scriptExtra = '<script src="/public/layer/layer.js"></script>';
 //        $scriptExtra .= '<script src="/public/js/check/approve.js"></script>';
         $content = $this->load->view("check/approveDev", $data, TRUE);
@@ -242,10 +268,8 @@ class Check extends CI_Controller
 
         //所有审核归零
         $dbObj->where('id', $apply_id);
-        $dbObj->update('check_apply', ['check_jim' => 0, 'check_tel' => 0, 'is_apply' => 0, 'content' => '']);
-
+        $dbObj->update('check_apply', ['check_jim' => 0, 'check_tel' => 0, 'is_apply' => 0]);
         return;
-
     }
 
     /**
