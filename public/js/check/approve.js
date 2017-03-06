@@ -20,7 +20,7 @@ $(".editArrange").bind("click", function () {
     $res = $(this).parent().find($("input")).val();
     layer.open({
         type: 2,
-        area: ["900px", "550px"],
+        area: ["900px", "250px"],
         fixed: false, //不固定
         maxmin: true,
         content: "/check/editArrange/" + $res,
@@ -38,6 +38,27 @@ $(".approveImg").bind("click", function () {
         maxmin: true,
         content:  $res,
     });
+});
+
+$(".update").bind("click",function () {
+
+    var id = $(this).parent().parent().find(".id").val();
+    var order = $(this).parent().parent().find(".order").val();
+    var content = $(this).parent().parent().find(".content").val();
+    var desc = $(this).parent().parent().find(".desc").val();
+
+
+
+    if(content==''){
+        alert('一个填写问题内容必填');
+    }else{
+        $.post("updateQuestion",{"id":id,"order":order,"content":content,"desc":desc},function(data){
+            if(data == 'true'){
+                alert('更新成功！');
+                location.reload();
+            }
+        });
+    }
 });
 
 //关闭窗口

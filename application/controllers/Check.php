@@ -34,6 +34,7 @@ class Check extends CI_Controller
     private function Check()
     {
         $check_role = $this->userObj->check_role;
+        $data['check_role'] = $check_role;
 
         $scriptExtra = '<script src="/public/layer/layer.js"></script>';
         $scriptExtra .= '<script src="/public/js/check/approve.js"></script>';
@@ -173,7 +174,7 @@ class Check extends CI_Controller
         $dbObj->where('substation_id', $subID);
         $res = $dbObj->get('check_device')->result();
 
-        $data['cases'] = [];
+        $data['devs'] = [];
         //无任何信息
         if (is_null($res)) {
             $data['cases'] = [];
@@ -185,6 +186,7 @@ class Check extends CI_Controller
                 foreach ($contents as $key => $content) {
                     array_push($data['cases'], [
                         'data_id' => $key,
+                        'data_name' => $this->mp_xjdh->get_device_name($key),
                         'data_pics' => $content,
                         'room_id' => $r->room_id,
                         'room_name' => $this->mp_xjdh->Get_room_name($r->room_id)->name,
@@ -269,6 +271,7 @@ class Check extends CI_Controller
         //所有审核归零
         $dbObj->where('id', $apply_id);
         $dbObj->update('check_apply', ['check_jim' => 0, 'check_tel' => 0, 'is_apply' => 0]);
+        redirect('');
         return;
     }
 
@@ -405,10 +408,8 @@ class Check extends CI_Controller
      */
     public function arrange()
     {
-
-
         $check_role = $this->userObj->check_role;
-
+        //未提交问题的局站：
         $scriptExtra = '<script src="/public/layer/layer.js"></script>';
         $scriptExtra .= '<script src="/public/js/check/approve.js"></script>';
         $scriptExtra .= '<script type="text/javascript" src="/public/js/tiny_mce/tinymce.min.js"></script>';
@@ -442,6 +443,29 @@ class Check extends CI_Controller
             array_push($data['bcList'], $bcObj);
 
             $dbObj = $this->load->database('default', TRUE);
+
+            //未提交
+            $emptyCheck = [];
+            //已经提交了内容的局站ID
+            $testArr = [];
+            $res = $dbObj->get('check_apply')->result();
+//            $dbObj->get('check_apply')->result_array();
+            foreach ($res as $k) {
+                $testArr[] = $k->substation_id;
+            }
+            $res = $dbObj->get('check_device')->result();
+            foreach ($res as $k) {
+                $testArr[] = $k->substation_id;
+            }
+
+            $dbObj->where_not_in('substation_id', $testArr);
+            $res = $dbObj->get('check_arrange')->result();
+
+            foreach ($res as $k) {
+                $emptyCheck[] = $k->substation_id;
+            }
+
+            //Ltest::test($testArr);
             //搜索
             //验收状态
             $checkStatus = $this->input->get('checkStatus');
@@ -454,76 +478,85 @@ class Check extends CI_Controller
             //电信督查审核时间
             $dateRangeTelApprove = $this->input->get('dateRangeTelApprove');
 
+//            Ltest::test($this->input->get());
             //Ltest::test($dateRangeApply);
 
             //获取现有的安排信息的数据
 
             //验收状态
-            //1' >  待验收
-            //3' > 吉姆督查核查完成
-            //4' > 电信督查核查完成
-            //5' > 验收完成
-            if ($checkStatus) {
-                switch ($check_role) {
+            //1' >  已经分配
+            //2' >  待验中
+            //3' >  待验完成 - 提交
+            //4' > 吉姆督查核查完成
+            //5' > 电信督查核查完成
+
+            if (!empty($checkStatus)) {
+                switch ($checkStatus) {
                     case 1:
                         $dbObj->where('is_apply !=', 1);
+                        $dbObj->where_in('substation_id', $emptyCheck);
                         break;
                     case 2:
+                        $dbObj->where('is_apply !=', 1);
+                        $dbObj->where_not_in('substation_id', $emptyCheck);
+                        break;
+                    case 3:
                         $dbObj->where('is_apply', 1);
                         $dbObj->where('check_jim !=', 1);
                         $dbObj->where('check_tel !=', 1);
                         break;
-                    case 3:
-                        $dbObj->where('check_jim',1);
-                        $dbObj->where('check_tel !=',1);
-                        break;
                     case 4:
-                        $dbObj->where('check_tel',1);
+                        $dbObj->where('check_jim', 1);
+                        $dbObj->where('check_tel !=', 1);
                         break;
                     case 5:
-                        $dbObj->where('check_jim',1);
-                        $dbObj->where('check_tel',1);
+                        $dbObj->where('check_tel', 1);
                         break;
                 }
             }
             //吉姆督导验收时间
-            if($dateRangeApply){
+            if (!empty($dateRangeApply)) {
                 $dateRangeArr = explode('至', $dateRangeApply);
-                $dbObj->where('apply_time <=',$dateRangeArr[1]);
-                $dbObj->where('apply_time >=',$dateRangeArr[0]);
+                $dbObj->where('apply_time <=', $dateRangeArr[1]);
+                $dbObj->where('apply_time >=', $dateRangeArr[0]);
             }
             //吉姆督查分配时间
-            if($dateRangeArrange){
-                $dateRangeArr = explode('至', $dateRangeApply);
-                $dbObj->where('arrange_time <=',$dateRangeArr[1]);
-                $dbObj->where('arrange_time >=',$dateRangeArr[0]);
+            if (!empty($dateRangeArrange)) {
+                $dateRangeArr = explode('至', $dateRangeArrange);
+                $dbObj->where('arrange_time <=', $dateRangeArr[1]);
+                $dbObj->where('arrange_time >=', $dateRangeArr[0]);
             }
             //吉姆督查审核时间
-            if($dateRangeJimApprove){
+            if (!empty($dateRangeJimApprove)) {
                 $dateRangeArr = explode('至', $dateRangeApply);
-                $dbObj->where('check_jim_time <=',$dateRangeArr[1]);
-                $dbObj->where('check_jim_time >=',$dateRangeArr[0]);
+                $dbObj->where('check_jim_time <=', $dateRangeArr[1]);
+                $dbObj->where('check_jim_time >=', $dateRangeArr[0]);
             }
             //电信督查审核时间
-            if($dateRangeTelApprove){
+            if (!empty($dateRangeTelApprove)) {
                 $dateRangeArr = explode('至', $dateRangeApply);
-                $dbObj->where('check_tel_time <=',$dateRangeArr[1]);
-                $dbObj->where('check_tel_time >=',$dateRangeArr[0]);
+                $dbObj->where('check_tel_time <=', $dateRangeArr[1]);
+                $dbObj->where('check_tel_time >=', $dateRangeArr[0]);
             }
-
 
 
             $dbObj->order_by('arrange_time', 'DESC');
             $data['arranges'] = $dbObj->get('check_arrange')->result();
             $data['subs'] = $dbObj->get('substation')->result();
+            $dbObj->where('check_role', 1);
             $data['users'] = $dbObj->get('user')->result();
+            $data['allUsers'] = $dbObj->get('user')->result();
+
+            $data['checkRole'] = $check_role;
+
+            //Ltest::test($data['checkRole'] );
 
 
             $content = $this->load->view("check/arrange", $data, TRUE);
             $this->mp_master->Show_Portal($content, $scriptExtra, '安排督导', $data);
         }
 
-        //提交结果
+        //提交结果 - 安排督导验收任务
         $userID = $this->input->get('user');
         $subID = $this->input->get('sub');
         if (($userID != 0) && ($subID != 0)) {
@@ -535,7 +568,7 @@ class Check extends CI_Controller
 
             if (count($res) > 0) {
                 //已经生成过此安排了，不能再生成
-                redirect('check/check/arrange');
+                redirect('check/arrange');
             }
 
             $substation = $this->mp_xjdh->Get_Substations(FALSE, FALSE, FALSE, FALSE, $subID);
@@ -556,6 +589,16 @@ class Check extends CI_Controller
             redirect('check/arrange');
         }
 
+        //提交结果 - 安排督导角色
+        $roleUser = $this->input->get('roleUser');
+        $role = $this->input->get('role');
+        if (($roleUser != 0) && ($role != 0)) {
+            $dbObj->where('id', $roleUser);
+            $dbObj->set('check_role', $role);
+            $dbObj->update('user');
+            redirect('check/arrange');
+        }
+
 
     }
 
@@ -571,11 +614,11 @@ class Check extends CI_Controller
         $userID = $this->input->get('user');
         $subID = $this->input->get('sub');
 
-        if (($userID != 0) && ($subID != 0)){
-            $dbObj->where('id',$arrangeID);
-            $dbObj->set('user_id',$userID);
-            $dbObj->set('substation_id',$subID);
-            $dbObj->set('arrange_time',date('Y-m-d H:i:s'));
+        if (($userID != 0) && ($subID != 0)) {
+            $dbObj->where('id', $arrangeID);
+            $dbObj->set('user_id', $userID);
+            $dbObj->set('substation_id', $subID);
+            $dbObj->set('arrange_time', date('Y-m-d H:i:s'));
             $dbObj->update('check_arrange');
         }
 
@@ -586,12 +629,68 @@ class Check extends CI_Controller
         $data['users'] = $dbObj->get('user')->result();
 
 
-
         $scriptExtra = '<script src="/public/layer/layer.js"></script>';
         $scriptExtra .= '<script src="/public/js/check/approve.js"></script>';
         $content = $this->load->view("check/edit_arrange", $data);
         $this->mp_master->Show_Pure($content, $scriptExtra, '编辑', $data);
     }
 
+    /**
+     *
+     * 问题管理
+     *
+     */
+    public function question()
+    {
+        $data = array();
+        $data['userObj'] = $this->userObj;
+        $data['bcList'] = array();
+        $bcObj = new Breadcrumb();
+
+        $bcObj->title = '审核工程';
+        $bcObj->url = site_url("check");
+        $bcObj->isLast = false;
+        array_push($data['bcList'], $bcObj);
+
+        $bcObj = new Breadcrumb();
+        $bcObj->title = '审核工程 - 问题管理';
+        $bcObj->url = site_url("check");
+        $bcObj->isLast = true;
+        array_push($data['bcList'], $bcObj);
+
+        $dbObj = $dbObj = $this->load->database('default', TRUE);
+        $data['question'] = $dbObj->get('check_question')->result();
+
+        $scriptExtra = '';
+        $scriptExtra .= '<script src="/public/js/check/approve.js"></script>';
+
+        $content = $this->load->view("check/ques_manage", $data, TRUE);
+        $this->mp_master->Show_Portal($content, $scriptExtra, '二级审核', $data);
+    }
+
+    public function updateQuestion()
+    {
+
+        $id = $this->input->post('id');
+        $order = $this->input->post('order');
+        $content = $this->input->post('content');
+        $desc = $this->input->post('desc');
+
+        $dbObj = $dbObj = $this->load->database('default', TRUE);
+
+        if ($id != 'insert') {
+            $dbObj->where('id', $id);
+            $dbObj->set('order', $order);
+            $dbObj->set('content', $content);
+            $dbObj->set('desc', $desc);
+            $dbObj->update('check_question');
+        } else {
+            $dbObj->set('order', $order);
+            $dbObj->set('content', $content);
+            $dbObj->set('desc', $desc);
+            $dbObj->insert('check_question');
+        }
+        echo 'true';
+    }
 
 }

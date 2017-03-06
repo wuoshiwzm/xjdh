@@ -93,8 +93,7 @@
                             <?php } else{ ?>
                             <thead>
                             <tr>
-                                <th>序号</th>
-                                <th>机房id</th>
+                                <th>设备名</th>
                                 <th>机房名</th>
                                 <th>上传图稿</th>
                             </tr>
@@ -104,7 +103,7 @@
                             <?php foreach ($cases as $room) { ?>
                                 <tr>
                                     <td>
-                                        <?php echo $room['data_id']; ?>
+                                        <?php echo $room['data_name']; ?>
                                     </td>
                                     <td>
                                         <?php echo $room['room_id']; ?>

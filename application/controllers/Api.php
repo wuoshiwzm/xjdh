@@ -806,6 +806,7 @@ class Api extends CI_Controller
         $locationType = is_null($this->input->get("locationType")) ? null : $this->input->get("locationType");
         $id = is_null($this->input->get("id")) ? null : $this->input->get("id");
 
+
         $dbObj = $this->load->database('default', TRUE);
         //获取局站列表
         if ($locationType == 1) {
@@ -827,9 +828,7 @@ class Api extends CI_Controller
             $jsonRet['data'] = json_encode(['checkSubList' => $res]);
             echo json_encode($jsonRet);
             return;
-        }
-
-        //获取机房列表 -- 只对应设备验收
+        } //获取机房列表 -- 只对应设备验收
         elseif ($locationType == 2) {
             $roomList = [];
             $subID = $id;
@@ -845,7 +844,7 @@ class Api extends CI_Controller
 
             $dbObj->where('substation_id', $subID);
 
-            if(!empty($roomList)){
+            if (!empty($roomList)) {
                 $dbObj->where_not_in('id', $roomList);
             }
 
@@ -856,9 +855,7 @@ class Api extends CI_Controller
             $jsonRet['data'] = json_encode(['checkRoomList' => $res]);
             echo json_encode($jsonRet);
             return;
-        }
-
-        //获取设备列表
+        } //获取设备列表
         elseif ($locationType == 3) {
             //已经提交的设备列表
             $deviceList = [];
@@ -899,10 +896,10 @@ class Api extends CI_Controller
     function CheckUpload()
     {
 
-        $jsonRet['ret'] = 1;
-        $jsonRet['data'] = '成功链接';
-        echo json_encode($jsonRet);
-        return;
+//        $jsonRet['ret'] = 1;
+//        $jsonRet['data'] = '成功链接';
+//        echo json_encode($jsonRet);
+//        return;
 
         //存储文件
         $file_path = "./public/portal/Check_image/";
@@ -933,7 +930,6 @@ class Api extends CI_Controller
      * 获取问题/设备
      * $type 1 工艺验收 2 设备验收
      * $topicID $type为1时指局站id $type为2时指机房id 机房id;
-     * $type = 1 $typic = null则返回所有可以提交的问题。
      */
     function getQuestion($type, $topicID = null)
     {
@@ -943,23 +939,24 @@ class Api extends CI_Controller
         $dbObj = $this->load->database('default', TRUE);
         $tableName = '';
         $search = '';
-        if($type == 1){
+        if ($type == 1) {
             //工艺 - 通过局站ID 获取对应的验收问题
             $tableName = 'check_apply';
             $search = 'substation_id';
             $sourceTable = 'check_question';
-        }elseif($type == 2){
+        } elseif ($type == 2) {
             //设备 - 通过机房ID 获取对应的验收设备
             $tableName = 'check_device';
-            $search - 'room_id';
+            $search = 'room_id';
             $sourceTable = 'device';
         }
+
         $dbObj->where($search, $topicID);
-        $apply = $dbObj->get($tableName)->row();
+        $apply = $dbObj->get($tableName)->row_array();
 
         //审核表里没有对应机房的信息，说明没有提交申请，获取所有问题
-        if (is_null($apply)) {
-            if($type == 1){
+        if (empty($apply)) {
+            if ($type == 1) {
                 //工艺
                 $res = $dbObj->get('check_question')->result();
 
@@ -967,10 +964,12 @@ class Api extends CI_Controller
                 $jsonRet['data'] = json_encode(['questionSubList' => $res]);
                 echo json_encode($jsonRet);
                 return;
-            }elseif ($type == 2){
+            } elseif ($type == 2) {
+
                 //设备
-                $dbObj->where('room_id',$topicID);
-                $res = $dbObj->get('data_id,name')->result();
+                $dbObj->where('room_id', $topicID);
+                $dbObj->select('data_id,name');
+                $res = $dbObj->get('device')->result();
 
                 $jsonRet['ret'] = 0;
                 $jsonRet['data'] = json_encode(['questionDevList' => $res]);
@@ -984,7 +983,7 @@ class Api extends CI_Controller
             foreach ($content as $key => $c) {
                 $questionIDs[] = $key;
             }
-            if($type == 1){
+            if ($type == 1) {
                 $dbObj->where_not_in('id', $questionIDs);
                 $res = $dbObj->get('check_question')->result();
 
@@ -992,9 +991,11 @@ class Api extends CI_Controller
                 $jsonRet['data'] = json_encode(['questionSubList' => $res]);
                 echo json_encode($jsonRet);
                 return;
-            }elseif($type == 2){
-                $dbObj->where('room_id',$topicID);
+            } elseif ($type == 2) {
+
+                $dbObj->where('room_id', $topicID);
                 $dbObj->where_not_in('data_id', $questionIDs);
+                $dbObj->select('data_id,name');
                 $res = $dbObj->get('device')->result();
 
                 $jsonRet['ret'] = 0;
@@ -1011,8 +1012,6 @@ class Api extends CI_Controller
                 return;
             }
         }
-
-
     }
 
     /**
@@ -1115,18 +1114,18 @@ class Api extends CI_Controller
         $type = is_null($this->input->get("type")) ? null : $this->input->get("type");
         $locID = is_null($this->input->get("locID")) ? null : $this->input->get("locID");
 
-        if($type == 1){
+        if ($type == 1) {
             $dbObj->select('id,content,desc');
             $ques = $dbObj->get('check_question')->result_array();
-        }elseif($type == 2){
-            $dbObj->where('room_id',$locID);
+        } elseif ($type == 2) {
+            $dbObj->where('room_id', $locID);
             $dbObj->select('data_id,name');
             $ques = $dbObj->get('device')->result_array();
         }
 
         foreach ($ques as &$q) {
 
-            if($type == 1){
+            if ($type == 1) {
                 $dbObj->where('substation_id', $locID);
                 $dbObj->select('content');
                 $answer = $dbObj->get('check_apply')->row_array();
@@ -1139,7 +1138,7 @@ class Api extends CI_Controller
                 }
             }
 
-            if($type == 2){
+            if ($type == 2) {
                 $dbObj->where('room_id', $locID);
                 $dbObj->select('content');
                 $answer = $dbObj->get('check_device')->row_array();
@@ -1164,19 +1163,19 @@ class Api extends CI_Controller
     /**
      * 则更新此机房对应的check_apply表的is_apply字段为1
      */
-    private function updateCheckAppply($typeID, $roomID, $subID)
+    private function updateCheckAppply($typeID , $id)
     {
         //施工工艺验收
         if ($typeID == 1) {
             $tableName = 'check_apply';
             $search = 'substation_id';
-            $id = $subID;
+
         }
         //设备验收
         if ($typeID == 2) {
             $tableName = 'check_device';
             $search = 'room_id';
-            $id = $roomID;
+
         }
         $dbObj = $this->load->database('default', TRUE);
         $dbObj->where($search, $id);
@@ -1202,14 +1201,23 @@ class Api extends CI_Controller
         }
 
         //设备验收
-        if ($typeID == 2) {
+        elseif ($typeID == 2) {
             $dbObj->where('room_id', $id);
             $dbObj->where_not_in('id', $questionIDs);
             $questionAvailable = $dbObj->get('device')->row_array();
 
             //更新arrange表
             if (empty($questionAvailable)) {
-                $this->updateStatusDevice($subID);
+                $dbObj->where('id',$id);
+                $dbObj->select('substation_id');
+                $room = $dbObj->get('room')->row();
+
+                $dbObj->where('id',$room->substation_id);
+                $dbObj->select('id');
+                $sub = $dbObj->get('substation')->row();
+
+
+                $this->updateStatusDevice($sub->id);
             }
         }
 
@@ -1255,7 +1263,6 @@ class Api extends CI_Controller
             $dbObj->set('status_device', 1);
             $dbObj->update('check_arrange');
         }
-
     }
 
 
@@ -1329,6 +1336,8 @@ class Api extends CI_Controller
             $dbObj->update('check_apply');
         }
 
+
+
         //更新对应apply状态
         if ($typeID == 1) {
             $writable = $this->updateCheckAppply($typeID, $substationID);
@@ -1336,6 +1345,7 @@ class Api extends CI_Controller
         if ($typeID == 2) {
             $writable = $this->updateCheckAppply($typeID, $roomID);
         }
+
         if ($writable) {
             $jsonRet['ret'] = 0;
             $jsonRet['data'] = '';
@@ -1470,28 +1480,28 @@ class Api extends CI_Controller
         return $res;
     }
 
-    //------------------------------修改系统------------------------------------------//
+    //------------------------------修改系统------------------------------//
 
 
     /**
      * @param $userID
      * @param $type 1:工艺- 2：设备
      * @param $locationType 1:局站- 2：机房
+     * $userID
      * 获取用户已经提交的局站
-     *
      */
-    public function getEditSubs($userID,$type,$locationType)
+    public function getEditSubs($userID, $type, $locationType)
     {
-        $dbObj = $this->loadd->database('default',TRUE);
+        $dbObj = $this->loadd->database('default', TRUE);
         $userID = is_null($this->input->get("userID")) ? null : $this->input->get("userID");
         $type = is_null($this->input->get("type")) ? null : $this->input->get("type");
         $locationType = is_null($this->input->get("locationType")) ? null : $this->input->get("locationType");
 
         //工艺 - 获取局站
-        if(($type == 1) && ($locationType ==1)){
+        if (($type == 1) && ($locationType == 1)) {
             $dbObj->from('check_apply');
             $dbObj->join('substation', 'check_apply.substation_id = substation.id');
-            $dbObj->where('user_id',$userID);
+            $dbObj->where('user_id', $userID);
 
             $dbObj->select(
                 '
@@ -1499,7 +1509,7 @@ class Api extends CI_Controller
             substation.name as substation_name,
             '
             );
-            $res =  $dbObj->get()->result();
+            $res = $dbObj->get()->result();
 
             $jsonRet['ret'] = 0;
             $jsonRet['data'] = json_encode(['subsList' => $res]);
@@ -1508,10 +1518,10 @@ class Api extends CI_Controller
         }
 
         //设备 - 获取局站
-        if(($type == 2) && ($locationType ==1)){
+        if (($type == 2) && ($locationType == 1)) {
             $dbObj->from('check_device');
             $dbObj->join('substation', 'check_device.substation_id = substation.id');
-            $dbObj->where('user_id',$userID);
+            $dbObj->where('user_id', $userID);
 
             $dbObj->select(
                 '
@@ -1519,7 +1529,7 @@ class Api extends CI_Controller
             substation.name as substation_name,
             '
             );
-            $res =  $dbObj->get()->result();
+            $res = $dbObj->get()->result();
 
             $jsonRet['ret'] = 0;
             $jsonRet['data'] = json_encode(['subsDevList' => $res]);
@@ -1529,10 +1539,10 @@ class Api extends CI_Controller
 
         //设备 - 获取机房
         //设备 - 获取局站
-        if(($type == 2) && ($locationType ==1)){
+        if (($type == 2) && ($locationType == 1)) {
             $dbObj->from('check_device');
             $dbObj->join('room', 'check_device.room_id = room.id');
-            $dbObj->where('user_id',$userID);
+            $dbObj->where('user_id', $userID);
 
             $dbObj->select(
                 '
@@ -1540,7 +1550,7 @@ class Api extends CI_Controller
             room.name as room_name,
             '
             );
-            $res =  $dbObj->get()->result();
+            $res = $dbObj->get()->result();
 
             $jsonRet['ret'] = 0;
             $jsonRet['data'] = json_encode(['roomsList' => $res]);
@@ -1555,17 +1565,17 @@ class Api extends CI_Controller
      * @param $id 工艺对应局站id 设备对应机房id
      * 获取用户已经提交的问题 对应局站(工艺)或机房(设备)
      */
-    public function getEditQuestions($type,$id)
+    public function getEditQuestions($type, $id)
     {
-        $dbObj = $this->loadd->database('default',TRUE);
+        $dbObj = $this->loadd->database('default', TRUE);
         $type = is_null($this->input->get("type")) ? null : $this->input->get("type");
         $id = is_null($this->input->get("id")) ? null : $this->input->get("id");
 
         //工艺
-        if($type == 1){
-        $dbObj->where('substation_id',$id);
-        $dbObj->select('content');
-        $res = $dbObj->get('check_apply')->row();
+        if ($type == 1) {
+            $dbObj->where('substation_id', $id);
+            $dbObj->select('content');
+            $res = $dbObj->get('check_apply')->row();
 
             $jsonRet['ret'] = 0;
             $jsonRet['data'] = json_encode(['subContentList' => $res]);
@@ -1574,8 +1584,8 @@ class Api extends CI_Controller
         }
 
         //设备
-        if($type == 2){
-            $dbObj->where('room_id',$id);
+        if ($type == 2) {
+            $dbObj->where('room_id', $id);
             $dbObj->select('content');
             $res = $dbObj->get('check_apply')->row();
 
@@ -1585,8 +1595,6 @@ class Api extends CI_Controller
             return;
 
         }
-
-
     }
 
     /**
@@ -1620,11 +1628,11 @@ class Api extends CI_Controller
             return;
         }
 
-        if($type ==1){
+        if ($type == 1) {
             $subID = $this->input->post("id");
             $table = 'check_apply';
             $search = 'substations_id';
-        }elseif($type == 2){
+        } elseif ($type == 2) {
             $roomID = $this->input->post("id");
             $table = 'check_device';
             $search = 'room_id';

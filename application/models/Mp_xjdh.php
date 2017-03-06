@@ -4681,6 +4681,13 @@ class MP_Xjdh extends CI_Model
         return $dbObj->get('user')->row()->full_name;
     }
 
+    function get_device_name($data_id){
+        $dbObj = $this->load->database('default', TRUE);
+        $dbObj->where('data_id',$data_id);
+        $dbObj->select('name');
+        return $dbObj->get('device')->row()->name;
+    }
+
     function getArrangeByID($arrangeID){
         $dbObj = $this->load->database('default', TRUE);
         $dbObj->where('id',$arrangeID);
