@@ -896,10 +896,11 @@ class Api extends CI_Controller
     function CheckUpload()
     {
 
-//        $jsonRet['ret'] = 1;
-//        $jsonRet['data'] = '成功链接';
-//        echo json_encode($jsonRet);
-//        return;
+        $jsonRet['ret'] = 1;
+        //$jsonRet['data'] = '成功链接';
+        $jsonRet['data'] = json_encode($_FILES);
+        echo json_encode($jsonRet);
+        return;
 
         //存储文件
         $file_path = "./public/portal/Check_image/";
@@ -1654,6 +1655,38 @@ class Api extends CI_Controller
         return;
     }
 
+    /**
+     *
+     * 管理员审核模块
+     *
+     */
+
+    /**
+     * @param $userID
+     * 获取要审核的局站列表
+     */
+    public function getApproveSub($userID)
+    {
+
+    }
+
+    /**
+     * @param $subID
+     * 获取工艺验收提交的问题
+     */
+    public function getApproveApply($subID)
+    {
+
+    }
+
+    /**
+     * @param $subID
+     * 获取设备验收提交的内容
+     */
+    public function getApproveDevice($subID)
+    {
+
+    }
 
 }
 

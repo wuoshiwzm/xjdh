@@ -4694,6 +4694,18 @@ class MP_Xjdh extends CI_Model
         return $arrange = $dbObj->get('check_arrange')->row();
     }
 
+    function Get_substation_info($subID){
+        $dbObj = $this->load->database('default', TRUE);
+        $dbObj->where('id',$subID);
+        return $arrange = $dbObj->get('substation')->row();
+    }
+
+    function get_user_subs($userID){
+        $dbObj = $this->load->database('default', TRUE);
+        $dbObj->where('user_id',$userID);
+        return $arrange = $dbObj->get('check_arrange')->result();
+    }
+
     /**
      * @param null $arrangeID
      * @param null $userID

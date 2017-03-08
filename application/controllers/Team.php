@@ -76,7 +76,6 @@ class Team extends CommonController
                     if (User::Get_mobile_User($mobile)) {
                         $errMsg .= $data['errMsg'] = '手机号重复' . ',';
                     }
-
                         //写入数据
                         if ($errMsg == '') {
                             $dbObj = $this->load->database('default', TRUE);

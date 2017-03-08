@@ -469,17 +469,19 @@ class Check extends CI_Controller
             //搜索
             //验收状态
             $checkStatus = $this->input->get('checkStatus');
+            $data['checkStatus'] = $checkStatus;
             //吉姆督导验收时间
             $dateRangeApply = $this->input->get('dateRangeApply');
+            $data['dateRangeApply'] = $dateRangeApply;
             //吉姆督查分配时间
             $dateRangeArrange = $this->input->get('dateRangeArrange');
+            $data['dateRangeArrange'] = $dateRangeArrange;
             //吉姆督查审核时间
             $dateRangeJimApprove = $this->input->get('dateRangeJimApprove');
+            $data['dateRangeJimApprove'] = $dateRangeJimApprove;
             //电信督查审核时间
             $dateRangeTelApprove = $this->input->get('dateRangeTelApprove');
-
-//            Ltest::test($this->input->get());
-            //Ltest::test($dateRangeApply);
+            $data['dateRangeTelApprove'] = $dateRangeTelApprove;
 
             //获取现有的安排信息的数据
 
@@ -539,15 +541,15 @@ class Check extends CI_Controller
                 $dbObj->where('check_tel_time >=', $dateRangeArr[0]);
             }
 
-
             $dbObj->order_by('arrange_time', 'DESC');
             $data['arranges'] = $dbObj->get('check_arrange')->result();
             $data['subs'] = $dbObj->get('substation')->result();
             $dbObj->where('check_role', 1);
             $data['users'] = $dbObj->get('user')->result();
             $data['allUsers'] = $dbObj->get('user')->result();
-
             $data['checkRole'] = $check_role;
+
+            //$data['substationinfo'] = $this->mp_xjdh->Get_substation_info($subID);
 
             //Ltest::test($data['checkRole'] );
 
@@ -583,6 +585,7 @@ class Check extends CI_Controller
             $dbObj->set('user_name', $userName);
             $dbObj->set('substation_id', $subID);
             $dbObj->set('substation_name', $subName);
+
             $dbObj->set('arrange_time', $time);
             $dbObj->insert('check_arrange');
 
@@ -690,6 +693,110 @@ class Check extends CI_Controller
             $dbObj->set('desc', $desc);
             $dbObj->insert('check_question');
         }
+        echo 'true';
+    }
+
+    /**
+     *
+     *
+     * 工程进度管理
+     *
+     */
+
+    /**
+     *工程进度表
+     */
+    public function status()
+    {
+
+    }
+
+
+    /**
+     *
+     * 人员管理
+     *
+     *
+     */
+    public function people(){
+
+        $check_role = $this->userObj->check_role;
+        if($check_role != 4){
+            redirect('/check');
+        }
+        $dbObj = $this->load->database('default', TRUE);
+        //提交结果 - 安排督导角色
+        $roleUser = $this->input->get('roleUser');
+        $role = $this->input->get('role');
+        if (($roleUser != 0) && ($role != 0)) {
+            $dbObj->where('id', $roleUser);
+            $dbObj->set('check_role', $role);
+            $dbObj->update('user');
+            redirect('check/people');
+        }
+
+        $data = array();
+        $data['userObj'] = $this->userObj;
+        $data['bcList'] = array();
+        $bcObj = new Breadcrumb();
+
+        $bcObj->title = '审核工程';
+        $bcObj->url = site_url("check");
+        $bcObj->isLast = false;
+        array_push($data['bcList'], $bcObj);
+
+        $bcObj = new Breadcrumb();
+        $bcObj->title = '审核工程 - 人员管理';
+        $bcObj->url = site_url("check");
+        $bcObj->isLast = true;
+        array_push($data['bcList'], $bcObj);
+
+
+
+        $dbObj->where('check_role !=', '');
+        $dbObj->where('check_role !=', 4);
+        $data['roleusers'] = $dbObj->get('user')->result();
+
+        $scriptExtra = '<script src="/public/layer/layer.js"></script>';
+        $scriptExtra .= '<script src="/public/js/check/approve.js"></script>';
+        $scriptExtra .= '<script type="text/javascript" src="/public/js/tiny_mce/tinymce.min.js"></script>';
+        $scriptExtra .= '<script type="text/javascript" src="/public/js/jquery.validate.js"></script>';
+        $scriptExtra .= '<script type="text/javascript" src="/public/js/validate-extend.js"></script>';
+        $scriptExtra .= '<script type="text/javascript" src="/public/js/highcharts/highcharts.js"></script>';
+        $scriptExtra .= '<script type="text/javascript" src="/public/js/highcharts/modules/exporting.js"></script>';
+        $scriptExtra .= '<script type="text/javascript" src="/public/js/jstree/jstree.min.js"></script>';
+        $scriptExtra .= '<script type="text/javascript" src="/public/js/bootbox.js"></script>';
+        $scriptExtra .= '<script type="text/javascript" src="/public/js/moment.min.js"></script>';
+        $scriptExtra .= '<link rel="stylesheet" href="/public/css/daterangepicker-bs2.css"/>';
+        $scriptExtra .= '<script type="text/javascript" src="/public/js/daterangepicker.js"></script>';
+        $scriptExtra .= '<script type="text/javascript" src="/public/portal/js/powermeter_history.js"></script>';
+        //$scriptExtra .= '<script src="/public/js/jquery.combo.select.js"></script>';
+        $scriptExtra .= '<link rel="stylesheet" href="/public/css/combo.select.css"/>';
+
+        $dbObj->order_by('arrange_time', 'DESC');
+        $data['arranges'] = $dbObj->get('check_arrange')->result();
+        $data['subs'] = $dbObj->get('substation')->result();
+        $dbObj->where('check_role', 1);
+        $data['users'] = $dbObj->get('user')->result();
+
+        $dbObj->where('check_role is NULL',NULL,TRUE);
+        $data['allUsers'] = $dbObj->get('user')->result();
+        $data['checkRole'] = $check_role;
+
+        $content = $this->load->view("check/people", $data, TRUE);
+        $this->mp_master->Show_Portal($content, $scriptExtra, '安排督导', $data);
+    }
+
+    public function updateRole()
+    {
+        $userID = $this->input->post('userID');
+        $role = $this->input->post('role');
+
+        $dbObj = $dbObj = $this->load->database('default', TRUE);
+        $dbObj->where('id', $userID);
+        $dbObj->set('check_role', $role);
+        $dbObj->update('user');
+
         echo 'true';
     }
 

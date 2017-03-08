@@ -61,6 +61,31 @@ $(".update").bind("click",function () {
     }
 });
 
+$(".updatePeople").bind("click",function () {
+
+    var userID = $(this).parent().parent().find(".userID").val();
+    var role = $(this).parent().parent().find(".userRole").val();
+
+        $.post("updateRole",{"userID":userID,"role":role},function(data){
+            if(data == 'true'){
+                alert('更新成功！');
+                location.reload();
+            }
+        });
+
+});
+
+
+var user = $("#user").find("option:selected").text();
+var sub = $("#sub").find("option:selected").text();
+function checkForm() {
+    if (window.confirm("确认安排督导："+$.trim(user) +" 验收局站： "+ $.trim(sub)+"?")) {
+        return true;
+    }
+    return false;
+}
+
+
 //关闭窗口
 //关闭iframe
 // $('#closeIframe').click(function(){
