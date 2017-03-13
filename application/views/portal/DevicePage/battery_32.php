@@ -450,8 +450,8 @@ var type = <?php echo json_encode($type); ?>
                   <?php    
   	$row =	json_decode($dataObj->extra_para)->amount;
     for ($j = 0; $j < $row; $j += 4) {
-        ?>
-                  <tr>
+        ?>       
+                  <tr>  <?php if($j+1<=$row){ ?>	
 						<td><?php echo $j+1;?></td>
 						<td bat_num='<?php echo $j;?>'><span></span>&nbsp;</td>
 						<td class="hasThreshold">
@@ -461,6 +461,9 @@ var type = <?php echo json_encode($type); ?>
 								field="battery_<?php echo $j;?>_value"
 								class="btn btn-warning setThreshold">设置阀值</button>
 						<?php } ?></td>
+						 <?php } ?> 
+						 
+						<?php if($j+2<=$row){ ?>
 						<td><?php echo $j+2;?></td>
 						<td bat_num='<?php echo $j+1;?>'><span></span>&nbsp;</td>
 						<td class="hasThreshold">
@@ -470,6 +473,9 @@ var type = <?php echo json_encode($type); ?>
 								field="battery_<?php echo $j+1;?>_value"
 								class="btn btn-warning setThreshold">设置阀值</button>
 						<?php } ?></td>
+						 <?php } ?> 
+						 
+						<?php if($j+3<=$row){ ?>
 						<td><?php echo $j+3;?></td>
 						<td bat_num='<?php echo $j+2;?>'><span></span>&nbsp;</td>
 						<td class="hasThreshold">
@@ -479,6 +485,9 @@ var type = <?php echo json_encode($type); ?>
 								field="battery_<?php echo $j+2;?>_value"
 								class="btn btn-warning setThreshold">设置阀值</button>
 								<?php } ?></td>
+						 <?php } ?> 
+						 		
+						<?php if($j+4<=$row){ ?>		
 						<td><?php echo $j+4;?></td>
 						<td bat_num='<?php echo $j+3;?>'><span></span>&nbsp;</td>
 						<td class="hasThreshold">
@@ -488,6 +497,7 @@ var type = <?php echo json_encode($type); ?>
 								field="battery_<?php echo $j+3;?>_value"
 								class="btn btn-warning setThreshold">设置阀值</button>
 					       <?php } ?></td>
+					     <?php } ?>   
 					</tr>
                   <?php }?>         
                                   

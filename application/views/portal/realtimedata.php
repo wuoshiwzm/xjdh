@@ -5,19 +5,13 @@
 				<div class="primary-head">
 					<h3 class="page-header">管理面板</h3>
 					<ul class="breadcrumb">
-						<li>
-                            <a class="icon-home" href="/"></a> <span class="divider"><i
+						<li><a class="icon-home" href="/"></a> <span class="divider"><i
 								class="icon-angle-right"></i></span></li>
 						<?php foreach ($bcList as $bcObj){?>
 						<?php if($bcObj->isLast){?>	
-						<li class="active">
-                            <?php echo htmlentities($bcObj->title,ENT_COMPAT,"UTF-8");?>
-                        </li>
+						<li class="active"><?php echo htmlentities($bcObj->title,ENT_COMPAT,"UTF-8");?></li>
 						<?php }else {?>
-						<li>
-                            <a href='<?php echo htmlentities($bcObj->url,ENT_COMPAT,"UTF-8");?>'>
-                                <?php echo htmlentities($bcObj->title,ENT_COMPAT,"UTF-8");?>
-                            </a>
+						<li><a href='<?php echo htmlentities($bcObj->url,ENT_COMPAT,"UTF-8");?>'><?php echo htmlentities($bcObj->title,ENT_COMPAT,"UTF-8");?></a>
 							<span class="divider"><i class="icon-angle-right"></i></span></li>
 						<?php }?>
 						<?php }?>
@@ -51,8 +45,7 @@
 							</tr>
 						</thead>
 						<tbody>
-				          <?php $i=1; $piSettings = json_decode($roomObj->pi_setting,true); if(count($piSettings))
-				          {foreach ($piSettings as $piObj){?>
+				          <?php $i=1; $piSettings = json_decode($roomObj->pi_setting,true); if(count($piSettings)){foreach ($piSettings as $piObj){?>
 				          <tr>
 								<td class='center'><?php echo $i++;?></td>
 								<td class='center'><?php $keys = array_keys($piObj); echo $keys[0];?></td>
@@ -105,7 +98,7 @@
 											<tr>
 												<th>序号</th>
 												<th>阀值类型</th>
-												<th>阈值</th>
+												<th>阀值</th>
 												<th>信号名称</th>
 												<th>信号ID(4,5,6,7,8位)</th>
 												<th>告警级别</th>
@@ -124,7 +117,7 @@
 									</table>
 									<h4>设备告警规则</h4>
 									<span class='text-error'>*设置完毕，请点击"保存"按钮对所有修改进行保存</span>
-									<p>阀值类型：上限：当采样值增加大于上限触发。下限：当采样值减少小于下限时触发。阈值：采样值等于阀值时候触发。</p>
+									<p>阀值类型：上限：当采样值增加大于上限触发。下限：当采样值减少小于下限时触发。阀值：采样值等于阀值时候触发。</p>
 									<div class="row-fluid">
 										<div class='span6'>
 											<button type="button" class="btn btn-primary"
@@ -138,7 +131,7 @@
 											<tr>
 												<th>序号</th>
 												<th>阀值类型</th>
-												<th>阈值</th>
+												<th>阀值</th>
 												<th>信号名称</th>
 												<th>信号ID(4,5,6,7,8位)</th>
 												<th>告警级别</th>

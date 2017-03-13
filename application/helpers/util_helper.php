@@ -4,7 +4,21 @@ if (! defined('BASEPATH'))
 
 class Util
 {
-
+    function startsWith($haystack, $needle)
+    {
+        $length = strlen($needle);
+        return (substr($haystack, 0, $length) === $needle);
+    }
+    
+    function endsWith($haystack, $needle)
+    {
+        $length = strlen($needle);
+        if ($length == 0) {
+            return true;
+        }
+    
+        return (substr($haystack, -$length) === $needle);
+    }
     static function Is_date ($str)
     {
     	//函数将任何英文文本的日期时间描述解析为 Unix 时间戳

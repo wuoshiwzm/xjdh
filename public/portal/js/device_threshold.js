@@ -179,9 +179,6 @@ $(document).ready(function() {
 			                            <button class="btn btn-success dv_btn_save" title="保存"><i class=" icon-ok"></i></button>\
 				                        </div>\
                         </div></td></tr>');
-		tr.data('city_code', $("#selCity").val());
-		tr.data('county_code', $("#selCounty").val());
-		tr.data('substation_id', $("#selSubstation").val());
 		$(".dv_btn_del", tTr).click(function(){
 			$(this).parents("tr:eq(0)").remove();
 			var index = 1;
@@ -234,7 +231,7 @@ $(document).ready(function() {
 	
 	function edit_click() {
 		var pTr = $(this).parents("tr:eq(0)");
-		var typeSel = $('<select style="width:auto;"><option value="">请选择</option><option value="lower">下限</option><option value="upper">上限</option><option value="value">阈值</option></select>');
+		var typeSel = $('<select style="width:auto;"><option value="">请选择</option><option value="lower">下限</option><option value="upper">上限</option><option value="value">阀值</option></select>');
 		pTr.find("td:eq(1)").empty().append(typeSel);
 		typeSel.val(pTr.data("t_type"));		
 		enable_edit(pTr.find("td:eq(2)"), "span1");
@@ -286,7 +283,7 @@ $(document).ready(function() {
 			pTr.find("td:eq(1)").empty().text("上限");
 		}else if(t_type == "value")
 		{
-			pTr.find("td:eq(1)").empty().text("阈值");
+			pTr.find("td:eq(1)").empty().text("阀值");
 		}
 		
 		pTr.find("td:eq(2)").empty().text(t_value);
@@ -322,15 +319,15 @@ $(document).ready(function() {
 	
 	function save_click(){
 		var pTr = $(this).parents("tr:eq(0)");
-		//阈值类型
+		//阀值类型
 		if(pTr.find("td:eq(1) select").val() == "")
 		{
-			alert("请选择阈值类型");
+			alert("请选择阀值类型");
 			return;
 		}
 		if(pTr.find('td:eq(2) input').val() == "")
 		{
-			alert("请填写阈值");
+			alert("请填写阀值");
 			return;
 		}
 		if(pTr.find("td:eq(3) select").val() == "")
@@ -361,20 +358,7 @@ $(document).ready(function() {
 		var t_msg = pTr.find("td:eq(6) input").val();
 		var t_block = pTr.find("td:eq(7) input").prop("checked");
 		var t_time = pTr.find('td:eq(8) input').val();
-		//确定，每个阈值类型+告警级别，只能有一个规则
-		var bDup = false;
-		$("#tbRule tr").each(function(){
-			if($(this).find("td:eq(1)").text() == pTr.find("td:eq(1) select>option:selected").text() 
-					&& $(this).find("td:eq(3)").text() == pTr.find("td:eq(3) select>option:selected").text())
-			{
-				bDup = true;
-				return false;
-			}
-		});
-		if(bDup){
-			alert("同一阈值类型和告警级别(比如\"上限\"+\"一级告警\")只能设置一条规则,请修改后重试");
-			return false;
-		}
+		
 		pTr.data('t_type', t_type);
 		pTr.data('t_value', t_value);
 		pTr.data('t_level', t_level);
@@ -392,7 +376,7 @@ $(document).ready(function() {
 			pTr.find("td:eq(1)").empty().text("上限");
 		}else if(t_type == "value")
 		{
-			pTr.find("td:eq(1)").empty().text("阈值");
+			pTr.find("td:eq(1)").empty().text("阀值");
 		}
 		pTr.find("td:eq(2)").empty().text(t_value);
 		var levelStr;
@@ -500,7 +484,7 @@ $(document).ready(function() {
 						pTr.find("td:eq(1)").empty().text("上限");
 					}else if(t_type == "value")
 					{
-						pTr.find("td:eq(1)").empty().text("阈值");
+						pTr.find("td:eq(1)").empty().text("阀值");
 					}
 					pTr.find("td:eq(2)").empty().text(t_value);
 					var levelStr;
@@ -539,7 +523,7 @@ $(document).ready(function() {
 			var maxIndex = $("#tbRule tr").length + 1;
 			//<td><label style="display:inline-block;"><input type="checkbox" />A类</label style="display:inline-block;">&nbsp;<label style="display:inline-block;"><input type="checkbox" />B类</label><br/><label style="display:inline-block;"><input type="checkbox" />C类</label>&nbsp;<label style="display:inline-block;"><input type="checkbox" />D类</label></td>\
 			 
-			var tTr = $('<tr><td>' + maxIndex + '</td><td><select style="width:auto;"><option value="">请选择</option><option value="lower">下限</option><option value="upper">上限</option><option value="value">阈值</option></select></td>\
+			var tTr = $('<tr><td>' + maxIndex + '</td><td><select style="width:auto;"><option value="">请选择</option><option value="lower">下限</option><option value="upper">上限</option><option value="value">阀值</option></select></td>\
 						 <td><input type="text" class="span1" /></td>\
 						 <td><select style="width:auto;"><option value="">请选择</option><option value="1">一级告警</option><option value="2">二级告警</option><option value="3">三级告警</option><option value="4">四级告警</option></select></td>\
 						 <td><select style="width:auto;" class="selSignal"></select></td>\

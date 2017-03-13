@@ -29,13 +29,12 @@ class SMDThrift
 	
 	public function reloadCamera($id)
 	{
-                   
-				return $this->StatusChange("reloadCamera", $id, 9001);		
+        return $this->StatusChange("reloadCamera", $id, 9001);		
 	}
 	
 	public function cameraDoMonitor($id)
 	{
-	    return $this->StatusChange("cameraDoMonitor", $id, 9001);
+	    return $this->StatusChange("cameraDoMonitor", $id, 9000);
 	}
 	public function DeviceThresholdChange($id)
 	{
@@ -184,7 +183,7 @@ class SMDThrift
 		}		
 		catch (TException $tx)
 		{
-			var_dump($tx);
+			//var_dump($tx);
 			return -1;
 		}		
 		return -2;

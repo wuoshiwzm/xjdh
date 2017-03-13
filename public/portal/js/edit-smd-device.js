@@ -22,7 +22,16 @@ $(document).ready(function(){
         		}
         	},
         	txtName:{
-        		required: true
+        		required: true,
+        		remote: {
+                	url: '/portal/checkdevname',    
+                	type: 'post',
+                	data: {                     
+        		        devname: function() {
+        		            return $('#txtName').val();
+        		        },
+        		    }
+                }
         	},
         	txtIP:{
         		required: true,
@@ -60,7 +69,8 @@ $(document).ready(function(){
         		remote:'该设备ID已经被使用，请重新输入'
         	},
         	txtName:{
-        		required: '请填写设备名'
+        		required: '请填写设备名',
+        		remote: '请重新检查设备名'
         	},
         	txtIP:{
         		required: '请填写设备IP地址',
@@ -70,6 +80,17 @@ $(document).ready(function(){
         },
         ignore: ".ignore"
     });
+	
+	
+	
+	$('#selRoom').change(function(){
+		var room = $("#selRoom option:selected").text(); 
+		var devname = '监控设备（编号#302A（301E）智能采集板_'+room+"）";
+		$('#txtName').val(devname); 
+	});
+	
+	
+	
 	$('#btn-submit').click(function(){
     	var bRet = true;
     	if(!$('#txtDevNo').prop('readonly'))

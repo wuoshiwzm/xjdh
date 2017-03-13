@@ -69,13 +69,6 @@ class Oauth2 extends CI_Controller
     public function authenticate ()
 
     {
-//        $jsonRet = array();
-//        $jsonRet['ret'] = 1;
-//        $jsonRet['error'] = json_encode($this->input->post());
-//        $jsonRet['response'] = '';
-//        echo json_encode($jsonRet);
-//        return;
-
         // Do validation of App and user's login
         $this->load->library("form_validation");
         $this->form_validation->set_rules('client_id', 'client_id', 'required');
@@ -120,8 +113,7 @@ class Oauth2 extends CI_Controller
                 // Tell the auth server to check the required parameters are in the
                 // query string
 //var_dump($_POST);die;
-               $params = $this->authserver->getGrantType('authorization_code')
-                   ->checkAuthoriseParams($_POST);
+               $params = $this->authserver->getGrantType('authorization_code')->checkAuthoriseParams($_POST);
             } catch (Oauth2\Exception\ClientException $e) {
                 // Throw an error here which says what the problem is with the
                 // auth params
@@ -142,30 +134,35 @@ class Oauth2 extends CI_Controller
             }
             // Validate User Info
             if (1 != User::ValidUser($this->input->post('user_id'), $this->input->post('password'), true)) {
-                $jsonRet = array();
-                $jsonRet['ret'] = 2;
-                $jsonRet['error'] = "incorrect user login info";
-                $jsonRet['response'] = '';
-                echo json_encode($jsonRet);
-                return;
+            	if(-4 == User::ValidUser($this->input->post('user_id'), $this->input->post('password'), true)){
+            		$jsonRet = array();
+            		$jsonRet['ret'] = 8;
+            		$jsonRet['error'] = "门禁用户不能登录网站";
+            		$jsonRet['response'] = '';
+            		echo json_encode($jsonRet);
+            		return;
+            	}else{
+            		$jsonRet = array();
+            		$jsonRet['ret'] = 2;
+            		$jsonRet['error'] = "incorrect user login info";
+            		$jsonRet['response'] = '';
+            		echo json_encode($jsonRet);
+            		return;
+            	}
+            }
+            if (4 == User::ValidUser($this->input->post('user_id'), $this->input->post('password'), true)) {
+            	$jsonRet = array();
+            	$jsonRet['ret'] = 8;
+            	$jsonRet['error'] = "23333333";
+            	$jsonRet['response'] = '';
+            	echo json_encode($jsonRet);
+            	return;
             }
             // validation pass, now issue the access token
-
-
-
             $user = User::GetUser($this->input->post('user_id'));
-
-//            $jsonRet = array();
-//            $jsonRet['ret'] = 1;
-//            $jsonRet['error'] = json_encode($user);
-//            $jsonRet['response'] = '';
-//            echo json_encode($jsonRet);
-//            return;
-
             $userid = $user->id;
             $_POST['scopes'] = array();
-            $_POST['code'] = $this->authserver->getGrantType('authorization_code')
-                ->newAuthoriseRequest('user', $userid, $_POST);
+            $_POST['code'] = $this->authserver->getGrantType('authorization_code')->newAuthoriseRequest('user', $userid, $_POST);
             $accessToken = $this->authserver->issueAccessToken($_POST);
             $response['ret'] = 0;
             $response['error'] = '';

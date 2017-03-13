@@ -162,7 +162,7 @@ class Wap extends CI_Controller
         $data['scriptExtra'] = '<script type="text/javascript">var accessToken ="' . $accessToken . '",model = "' . $model . '";' . '</script>';
         if ($model == 'ad' || $model == 'di') {
             //$data['pageContent'] = $this->load->view('wap/page-addi', $data, TRUE);
-            $data['scriptExtra'] .= '<script type="text/javascript" src="/public/portal/js/rt_data/rt_data-addiapp.js"></script>';
+            $data['scriptExtra'] .= '<script type="text/javascript" src="/public/portal/js/rt_data/rt_data-addiapp.js?v=1.1"></script>';
         } else if($model == "powermeter")
         {
             $data['scriptExtra'] .= '<script type="text/javascript" src="/public/portal/js/rt_data/rt_data-powermeterapp.js?v=1"></script>';

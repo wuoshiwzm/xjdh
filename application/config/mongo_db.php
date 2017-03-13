@@ -27,11 +27,11 @@
 
 $config['mongo_db']['active'] = 'default';
 
-$config['mongo_db']['default']['no_auth'] = TRUE;
-$config['mongo_db']['default']['hostname'] = 'localhost';
+$config['mongo_db']['default']['no_auth'] = false;
+$config['mongo_db']['default']['hostname'] = '211.149.231.178';
 $config['mongo_db']['default']['port'] = '27017';
-$config['mongo_db']['default']['username'] = 'username';
-$config['mongo_db']['default']['password'] = 'password';
+$config['mongo_db']['default']['username'] = 'php_dev';
+$config['mongo_db']['default']['password'] = 'harbork4275';
 $config['mongo_db']['default']['database'] = 'jim_history';
 $config['mongo_db']['default']['db_debug'] = TRUE;
 $config['mongo_db']['default']['return_as'] = 'object';

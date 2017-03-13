@@ -138,8 +138,7 @@
                                  <label class="control-label" style="float: left;">上报时间段</label>
 								<div class="controls" style="margin-left: 20px; float: left;">
 									<input type="text" class='form-control date-range-picker'
-										name='reportdate'
-										value="<?php if(isset($reportdate)) echo $reportdate;?>">
+										name='reportdate' value="<?php if(isset($reportDate)) echo htmlentities($reportDate, ENT_COMPAT, "UTF-8"); ?>">
 								</div>
 							</div>							
 							<table class="table table-bordered responsive table-striped table-sortable">
@@ -224,12 +223,17 @@
 									<td><?php echo htmlentities(Defines::$gCounty[$alarmObj->city_code][$alarmObj->county_code],ENT_COMPAT,"UTF-8");?></td>
 									<td><?php echo htmlentities($alarmObj->substation_name,ENT_COMPAT,"UTF-8");?></td>	
 									<td><?php echo htmlentities($alarmObj->room_name,ENT_COMPAT,"UTF-8");?></td>
-									<td><?php echo $devModelName[$alarmObj->model]; ?></td>
-									<td><a href='/portal/realtimedata/<?php echo htmlentities($alarmObj->room_id,ENT_COMPAT,"UTF-8");?>/<?php echo htmlentities($alarmObj->model,ENT_COMPAT,"UTF-8");?>'><?php echo htmlentities($alarmObj->dev_name,ENT_COMPAT,"UTF-8");?></a></td>
+									<?php if(strlen($alarmObj->data_id)>6) {?>
+									   <td><?php echo $devModelName[$alarmObj->model]; ?></td>
+									   <td><a href='/portal/realtimedata/<?php echo htmlentities($alarmObj->room_id,ENT_COMPAT,"UTF-8");?>/<?php echo $devModelGroup[$alarmObj->model]; ?>/<?php echo htmlentities($alarmObj->data_id,ENT_COMPAT,"UTF-8"); ?>'><?php echo htmlentities($alarmObj->dev_name,ENT_COMPAT,"UTF-8");?></a></td>
+									<?php }else{?>
+									   <td><?php echo "监控设备"; ?></td>
+									   <td><a href='/portal/realtimedata/<?php echo htmlentities($alarmObj->room_id,ENT_COMPAT,"UTF-8");?>/<?php echo 'smd_device';?>/<?php echo htmlentities($alarmObj->data_id,ENT_COMPAT,"UTF-8"); ?>' ><?php echo htmlentities($alarmObj->dev_name,ENT_COMPAT,"UTF-8");?></a></td>
+									<?php }?>
+									
 									<td><?php echo htmlentities($alarmObj->signal_name,ENT_COMPAT,"UTF-8");?></td>
 									<td><?php echo htmlentities($alarmObj->signal_id,ENT_COMPAT,"UTF-8");?></td>
 									<td><?php
-        
 							        switch ($alarmObj->level) {
 							            case 1:
 							                echo '<span class="brown badge ">一级</span>';

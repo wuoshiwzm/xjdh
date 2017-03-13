@@ -344,27 +344,7 @@
 
 
 
-/* flexible width for the fancybox wrapper */
-.fancybox-wrap {
-  width: 80% !important;
-}
- 
-ul.boxes {
-  color: #777;
-  list-style: none;
-  font-size: 18px;
-  width: 7em;
-  margin-left: 7em;
-}
-ul.boxes li {
-  cursor: pointer;
-  background: url(//d12zt1n3pd4xhr.cloudfront.net/fp/img/fp5arrow.png) 0 2px no-repeat;
-  padding-left: 24px;
-  margin: 0.5ex 0;
-}
-ul.boxes li:hover {
-  color: #111;
-}
+
 
 
 

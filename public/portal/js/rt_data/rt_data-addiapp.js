@@ -21,7 +21,7 @@ $(document).ready(function() {
 							$('#s td:eq(0)').html(i);
 							$('#s td:eq(1) a').html(hrename);
 							if(obj.model == 'water' || obj.model == 'smoke'){
-								$('#s td:eq(2)').html(obj.value == 0 ? '<span class="label label-important">告警</span>' : '<span class="label label-success">正常</span>');
+								$('#s td:eq(2)').html(obj.alert_value > 0 ? '<span class="label label-important">告警</span>' : '<span class="label label-success">正常</span>');
 							}else if(obj.model == 'temperature'){
 								$('#s td:eq(2)').html('<span class="label label-success">'+ obj.value + '°C</span>');
 							}else if(obj.model == 'humid'){
@@ -34,7 +34,7 @@ $(document).ready(function() {
 						}	
 				}
 				if(obj.model == 'water' || obj.model == 'smoke'){
-					$('#device-'+ obj.data_id +'>td:eq(2)').html(obj.value == 0 ? '<span class="label label-important">告警</span>' : '<span class="label label-success">正常</span>');
+					$('#device-'+ obj.data_id +'>td:eq(2)').html(obj.alert_value > 0 ? '<span class="label label-important">告警</span>' : '<span class="label label-success">正常</span>');
 				}else if(obj.model == 'temperature'){
 					$('#device-'+ obj.data_id +'>td:eq(2)').html('<span class="label label-success">'+ obj.value + '°C</span>');
 				}else if(obj.model == 'humid'){
@@ -45,7 +45,6 @@ $(document).ready(function() {
 			
 		});
 	}
-	alert("aa");
 	refreshData();
 	setInterval(refreshData, 10000);
 	$(".ad").click(function(){

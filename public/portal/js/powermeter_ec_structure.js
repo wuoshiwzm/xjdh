@@ -15,58 +15,74 @@ $(document).ready(function(){
             firstDay: 0
     	}
 	});
+    $(function () {
+	    $('#pieChart').highcharts({
+	        chart: {
+	            plotBackgroundColor: null,
+	            plotBorderWidth: null,
+	            plotShadow: false
+	        },
+	        title: {
+	            text: '能耗结构饼状图'
+	        },
+	        tooltip: {
+	            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+	        },
+	        plotOptions: {
+	            pie: {
+	                allowPointSelect: true,
+	                cursor: 'pointer',
+	                dataLabels: {
+	                    enabled: false
+	                },
+	                showInLegend: true
+	            }
+	        },
+	        series: [{
+	            type: 'pie',
+	            name: '所占比率',
+	            data: [
+	                {   name: '市电进入',
+	                    y: total,
+	                    sliced: true,
+	                    selected: true
+	                },
+	                ['主设备',   main],
+	                ['空调',     air],
+	                ['其他',   other]
+	            ]
+	        }]
+	     });
+	  });
+      $(function () {
+          $('#barChart').highcharts({
+              chart: {
+                  type: 'column'
+              },
+              title: {
+                  text: '能耗结构柱状图'
+              },
+              xAxis: {
+                  categories: ['市电进入', '主设备', '空调', '其他']
+              },
+              yAxis: {
+                  title: {
+                      text: '能耗 (度)'
+                  }
+              },
+              credits: {
+                  enabled: false
+              },
+              series: [{
+                  name: '能耗 (度)',
+                  data: [total, main, air, other]
+              }]
+          });
+      });
 	
-	var data = [{
-        label: "主设备",
-        data: main/total
-    }, {
-        label: "空调",
-        data: air/total
-    }, {
-        label: "其他",
-        data: other/total
-    }];
-    var options = {
-        series: {
-            pie: {
-                show: true
-            }
-        },
-        legend: {
-            show: true
-        },
-        grid: {
-            hoverable: true,
-            clickable: true
-        },
-        tooltip: true,
-        tooltipOpts: {
-            defaultTheme: false,
-            content: "%p",
-        }
-    };
-    $.plot($("#pieChart"), data, options);
-    
-    var data1 =  [ ["主设备", main], ["空调", air], ["其他", other]];
-   
-	$.plot("#barChart", [data1 ], {
-		series: {
-			bars: {
-				show: true,
-				barWidth: 0.6,
-				align: "center"
-			}
-		},
-        grid: {
-            hoverable: true
-        },
-		xaxis: {
-			mode: "categories"
-		},
-		tooltip: true,
-        tooltipOpts: {
-            defaultTheme: false,
-            content: "%y",
-        }
-	});
+	
+	
+	
+	
+	
 });

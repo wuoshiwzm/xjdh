@@ -37,8 +37,12 @@ class Api_v1 extends Api
                             $canOpen = true;
                         }else if(in_array($this->user->user_role, array("city_admin","operator")))
                         {
-                            if($dataObj->city_code == $this->user->city_code)
-                                $canOpen = true;
+                        	$userPrivilegeObj = User::Get_UserPrivilege($this->user->id);
+                        	$areaPrivilegeArray = json_decode($userPrivilegeObj->area_privilege);
+                        	if($dataObj->city_code == $this->user->city_code && in_array($dataObj->substation_id,$areaPrivilegeArray))
+                        		$canOpen = true;                       	
+//                             if($dataObj->city_code == $this->user->city_code)
+//                                 $canOpen = true;
                         }else{
                             $duObj = $this->mp_xjdh->Get_DoorUser($dataObj->data_id, $this->user->id);
                             if(count($duObj) && $duObj->remote_control)

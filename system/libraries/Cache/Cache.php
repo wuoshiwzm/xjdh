@@ -75,8 +75,8 @@ class CI_Cache extends CI_Driver_Library {
 	 * @var mixed
 	 */
 	/* 2016-10-8 我直接改了这个地方 */
+	//protected $_adapter = 'memcache';
 	protected $_adapter = 'memcached';
-
 	/**
 	 * Fallback driver
 	 *

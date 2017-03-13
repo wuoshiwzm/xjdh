@@ -25,6 +25,7 @@
 			实时监控视频加载中...
 		</div>
 		<div class="tab-content pic"  data_id='<?php echo $dataObj->data_id;?>' id='pic-<?php echo $dataObj->data_id;?>'  style="display: none;height:600px;">
+		<img class="tab-content" src="/portal/camera_screenshort/{<?php echo $dataObj->data_id;?>}"  data_id='<?php echo $dataObj->data_id;?>' id='<?php echo $dataObj->data_id;?>-img'  style="display: none;height:600px;"/>
 		</div>
 		<div class="tab-content li"  data_id='<?php echo $dataObj->data_id;?>' id='li-<?php echo $dataObj->data_id;?>' style="display: none;float: left;width:120px;height:600px;">
 			<p align="center"><font size=2><b>当前可查看时间段：</b></font></p>
