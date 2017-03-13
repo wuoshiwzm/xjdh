@@ -1,6 +1,7 @@
 $(document).ready(function(){
 	var originObj = $("#departmentClone").clone();
 	function city_change(){
+
 		var nodeObj = $(this).parents(".department").find('.selCounty');
 		$.get('/portal/getcounty',{citycode:$(this).val()},function(data){
 			eval('var ret =' + data);
@@ -94,66 +95,82 @@ $(document).ready(function(){
             firstDay: 0
     	}
 	});
-	
 	if(dataArray)
-    {
-		var seriesData = []; var categories = []
-	    for(var i in labelArray)
-	    {
-	        seriesData[i] = [];
-	        for(var data in dataArray)
-	        {
-	            categories.push(data);
-	            for(var type in dataArray[data])
-	            {
-	                if(labelArray[i] == type)
-	                seriesData[i].push(dataArray[data][type]);
-	            }
-	        }
-	    }
-	    var series = [];
-	    for(var i in labelArray)
-	    {
-	        var arr = {name : labelArray[i],data : seriesData[i]};
-	        series.push(arr);
-	    }
-	    
-        $(function () {
-	        $('#lineChart').highcharts({
-	            title: {
-	                text: '能耗对比分析折线图',
-	                x: -20
-	            },
-	            subtitle: {
-	                text: '',
-	                x: -20
-	            },
-	            xAxis: {
-	                categories: categories
-	            },
-	            yAxis: {
-	                title: {
-	                    text: '能耗 (度)'
-	                },
-	                plotLines: [{
-	                    value: 0,
-	                    width: 1,
-	                    color: '#808080'
-	                }]
-	            },
-	            tooltip: {
-	                valueSuffix: '度'
-	            },
-	            legend: {
-	                layout: 'vertical',
-	                align: 'right',
-	                verticalAlign: 'middle',
-	                borderWidth: 0
-	            },
-	            series: series
-	        });
-	    });
-    }
+	{
+	    var chartData = [
+	         			
+	                     ];
+		var seriesData = [];
+		for(var i=0;i < labelArray.length;i++)
+		{
+			seriesData[i] = [];
+		}
+		for(var obj in dataArray)
+		{
+			var i = 0;
+			for(var city in  dataArray[obj])
+			{
+				var pointData = [];
+				pointData.push(obj);
+				pointData.push(dataArray[obj][city]);
+				seriesData[i++].push(pointData);
+			}			
+		}
+		for(var i=0;i < labelArray.length;i++)
+		{
+			chartData.push(
+				{
+				    data: seriesData[i],
+				    label: labelArray[i],
+				    points: {
+				        show: true
+				    },
+				    lines: {
+				        show: true
+				    },
+				    yaxis: 2
+				});
+		}
+		
+		var options = {
+				series: {
+		            lines: {
+		                show: true,
+		                fill: false
+		            },
+		            points: {
+		                show: true,
+		                lineWidth: 2,
+		                fill: true,
+		                fillColor: "#ffffff",
+		                symbol: "circle",
+		                radius: 2,
+		            },
+		            shadowSize: 0,
+		        },
+		        grid: {
+		            hoverable: true,
+		            clickable: true,
+		            tickColor: "#f9f9f9",
+		            borderWidth: 1
+		        },
+		        colors: ["#b086c3", "#ea701b"],
+		        xaxis: {
+					mode: "categories"
+				},
+		        tooltip: true,
+		        tooltipOpts: {
+		            defaultTheme: false
+		        },
+		        legend: {
+		            position: 'nw',
+		            labelBoxBorderColor: "#000000",
+		            container: $("#area-chart #legendPlaceholderArea"),
+		            noColumns: 0
+		        }
+		    };
 	
+	    $.plot($("#lineChart"), chartData, options);
+	}
     
 });

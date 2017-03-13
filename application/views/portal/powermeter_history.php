@@ -43,11 +43,10 @@
 					<div class="widget-container">
 						<form class="form-horizontal">
 						  <div class="control-group">
-								<label class="control-label">当前选中电表<input type="hidden" id="data_id" name="data_id" 
-								value="<?php echo $data_id;?>" /></label>
+								<label class="control-label">当前选中电表<input type="hidden" id="data_id" name="data_id" /></label>
 								<div class="controls" id="selPowerMeter">
 									<?php if(isset($dataObj)){ 
-									  echo Defines::$gCity[$dataObj->city_code].">".Defines::$gCounty[$dataObj->city_code][$dataObj->county_code].">".$dataObj->substation_name.">".$dataObj->room_name.">".$dataObj->name;
+									   echo $dataObj->city.">".$dataObj->county.">".$dataObj->substation_name.">".$dataObj->room_name.">".$dataObj->name;
 									}?>
 								</div>
 							</div>

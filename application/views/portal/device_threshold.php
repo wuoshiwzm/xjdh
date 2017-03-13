@@ -120,7 +120,7 @@ var gDeviceThresholdParam = <?php echo json_encode(Defines::$gDeviceThresholdPar
 		<?php }?>
 		<div class="row-fluid">
 			<div class="span12">
-				<div class="switch-board gray">批量设置阀值会作用到所有同类型的设备上。</div>
+				<div class="switch-board gray">批量设置阈值会作用到所有同类型的设备上。</div>
 				<div class="content-widgets light-gray">
 					<div class="widget-container">
 						<div class="row-fluid">
@@ -148,12 +148,8 @@ var gDeviceThresholdParam = <?php echo json_encode(Defines::$gDeviceThresholdPar
 								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 								<button type="button" class="btn btn-primary"
 									id="btnAddDeviceVar">添加设备数据变量</button>
-
 							</div>
-
-
 						</div>
-
 					</div>
 					<br />
 					<div class="row-fluid">
@@ -228,7 +224,7 @@ var gDeviceThresholdParam = <?php echo json_encode(Defines::$gDeviceThresholdPar
 		<div class="modal-content">
 			<div class="modal-body modal-lg">
 				<h4>设置完毕，请点击"保存"按钮对所有修改进行保存</h4>
-				<p>阀值类型：上限：当采样值增加大于上限触发。下限：当采样值减少小于下限时触发。阀值：采样值等于阀值时候触发。</p>
+				<p>阈值类型：上限：当采样值增加大于上限触发。下限：当采样值减少小于下限时触发。阈值：采样值等于阈值时候触发。</p>
 				<div class="row-fluid">
 					<div class="span6">
 					   <h4>上级告警规则</h4>选中即可应用与本告警规则集合
@@ -241,8 +237,8 @@ var gDeviceThresholdParam = <?php echo json_encode(Defines::$gDeviceThresholdPar
 						   <th></th>						    
 							<th>序号</th>
 							<th>所属分公司/区域/局站</th>
-							<th>阀值类型</th>
-							<th>阀值</th>
+							<th>阈值类型</th>
+							<th>阈值</th>
 							<th>告警级别</th>
 							<th>信号名称</th>
 							<th>信号ID</th>
@@ -266,8 +262,8 @@ var gDeviceThresholdParam = <?php echo json_encode(Defines::$gDeviceThresholdPar
 					<thead>
 						<tr>
 							<th>序号</th>
-							<th>阀值类型</th>
-							<th>阀值</th>
+							<th>阈值类型</th>
+							<th>阈值</th>
 							<th>告警级别</th>
 							<th>信号名称</th>
 							<th>信号ID</th>

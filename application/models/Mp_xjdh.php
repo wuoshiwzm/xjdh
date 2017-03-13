@@ -348,6 +348,8 @@ class MP_Xjdh extends CI_Model
             $dbObj->or_like('Stationcode', $keyWord);
             $dbObj->group_end();
         }
+        
+        
         $dbObj->select('device.*,room.name as room_name,room.id as roomId,substation.city_code,substation.county_code,substation.Stationcode,smd_device.name as smd_device_name,smd_device.ip,substation.name as suname');
 	if($size != -1){
             $ret = $dbObj->get('device', $size, $offset)->result();
@@ -601,28 +603,6 @@ class MP_Xjdh extends CI_Model
         return $count;
     }
     
-    function Get_HomeAlarmCount ($cityCode, $countyCode, $startDatetime, $endDatetime)
-    {
-    	$dbObj = $this->load->database('default', TRUE);
-     	$dbObj->join('room', 'room.id=alert_realtime.room_id');
-     	$dbObj->join('substation', 'substation.id=room.substation_id');
-     	$dbObj->join('device', 'alert_realtime.data_id=device.data_id');
-    	if (!empty($cityCode)) {
-    		$dbObj->where('substation.city_code', $cityCode);
-    	}
-    	if (!empty($countyCode)) {
-    		$dbObj->where('substation.county_code', $countyCode);
-    	}
-    	if (!empty($startDatetime)) {
-    		$dbObj->where('added_datetime >', $startDatetime);
-    	}
-    	if (!empty($endDatetime)){
-    		$dbObj->where('added_datetime <', $endDatetime . ' 23:59:59');
-    	}
-    	$count = $dbObj->count_all_results('alert_realtime');
-    	return $count;
-    }
-    
     function Get_AlarmList ($cityCode, $countyCode, $substationId, $roomId, $devModelArray, 
     		                $level, $statusArr, $startDatetime, $endDatetime, $word, $selSignalName, $userLevel, $substationIdArray, $offset = 0, $limit = 20, $lastId = -1)
     {
@@ -787,10 +767,6 @@ class MP_Xjdh extends CI_Model
         $dbObj->join('room', 'room.id=device.room_id');
         $dbObj->join('substation', 'substation.id=room.substation_id');
 
-       
-        $dbObj->join('smd_device', 'pre_alert.data_id=smd_device.device_no','left');
-        $dbObj->join('room', 'room.id=smd_device.room_id','left');
-        $dbObj->join('substation', 'substation.id=room.substation_id','left');
         
         if($getsignalName)
         	$dbObj->where('pre_alert.signal_name', $getsignalName);
@@ -936,10 +912,10 @@ class MP_Xjdh extends CI_Model
     function Get_Substation_Lnglat_Count ()
     {
     	$dbObj = $this->load->database('default', TRUE);
-    	return $dbObj->count_all_results("substation");
+    	return $dbObj->count_all_results("substation");;
     }
     
-    function Up_Imgsubstation($id = false,$img = false,$newGrouping = false,$explain = false,$updataTime = false){
+    function Up_Imgsubstation($id = false,$img = false,$newGrouping = false,$explain = false){
     	$dbObj = $this->load->database('default', TRUE);
     	if(!$newGrouping){
     		$newGrouping="没有分组";
@@ -949,7 +925,6 @@ class MP_Xjdh extends CI_Model
     	$dbObj->set('newGrouping', $newGrouping);
     	$dbObj->set('stationImage', $arrimg);
     	$dbObj->set('explain', $explain);
-    	$dbObj->set('updataTime', $updataTime);
         $result = $dbObj->insert('stationimage');
     	}
     	return $result;
@@ -978,7 +953,7 @@ class MP_Xjdh extends CI_Model
     	$dbObj->set('settings', $settings);
     	$dbObj->update('substation');
     }
-    function Saves_Substation($citycode,$cityname,$countycode,$gCountyname, $txtName, $type, $Stationcode, $Lnglat, $gCountycode, $Sublocation)
+    function Saves_Substation($citycode,$cityname,$countycode,$gCountyname, $txtName, $type, $Stationcode, $Lnglat, $gCountycode)
     {
     	$dbObj = $this->load->database('default', TRUE);
     	$dbObj->set('city', $cityname);
@@ -988,7 +963,6 @@ class MP_Xjdh extends CI_Model
     	$dbObj->set('name', $txtName);
     	$dbObj->set('type', $type);
     	$dbObj->set('Stationcode', $citycode.$gCountycode.$Stationcode);
-    	$dbObj->set('location', $Sublocation);
     	if($Lnglat){
     		$Lnglat = explode(",",$Lnglat);
     		$dbObj->set('lng', $Lnglat[0]);
@@ -1000,12 +974,11 @@ class MP_Xjdh extends CI_Model
     	$dbObj->set('UploadTime', 'now()', false);
     	$dbObj->insert('substation');
     }
-     function Update_substation($id,$citycode,$cityname,$countycode,$gCountyname, $txtName, $type, $Stationcode, $Lnglat, $gCountycode, $Sublocation)
+     function Update_substation($id,$citycode,$cityname,$countycode,$gCountyname, $txtName, $type, $Stationcode, $Lnglat, $gCountycode)
     {
     	$dbObj = $this->load->database('default', TRUE);
     	$dbObj->where('id', $id);
     	$dbObj->set('city', $cityname);
-    	$dbObj->set('location', $Sublocation);
     	if($citycode)
     	$dbObj->set('city_code', $citycode);
     	$dbObj->set('county', $gCountyname);
@@ -1249,20 +1222,28 @@ class MP_Xjdh extends CI_Model
 //         //return $dbObj->count_all_results('room');
 //     }
 
-    function Save_Room($substation_id, $name)
+    function Save_Room($substation_id, $name, $addr, $code, $lng, $lat)
     {
     	$dbObj = $this->load->database('default', TRUE);
     	$dbObj->set('substation_id', $substation_id);
     	$dbObj->set('name', $name);
+    	$dbObj->set('location', $addr);
+    	$dbObj->set('code', $code);
+    	$dbObj->set('lng', $lng);
+    	$dbObj->set('lat', $lat);
     	$dbObj->insert('room');
     }
     
-    function Update_Room($id, $substation_id, $name)
+    function Update_Room($id, $substation_id, $name, $addr, $code, $lng, $lat)
     {
     	$dbObj = $this->load->database('default', TRUE);
     	$dbObj->where('id',$id);
     	$dbObj->set('substation_id', $substation_id);
     	$dbObj->set('name', $name);
+    	$dbObj->set('location', $addr);
+    	$dbObj->set('code', $code);
+    	$dbObj->set('lng', $lng);
+    	$dbObj->set('lat', $lat);
     	$dbObj->update('room');
     }
     
@@ -1307,14 +1288,6 @@ class MP_Xjdh extends CI_Model
 //     	return $dbObj->get('device_threshold')->result();	
 //     }
     
-    
-
-    function __Var ($id)
-    {
-        $dbObj = $this->load->database('default', TRUE);
-        return $dbObj->get_where("device_threshold", array("id" => $id))->row();
-    }
-
     function Get_DeviceThresholdByDevType ($dev_type = false, $var_name = false)
     {
         $dbObj = $this->load->database('default', TRUE);
@@ -1330,11 +1303,12 @@ class MP_Xjdh extends CI_Model
         $dbObj->update('device_threshold');
         return 0;
     }
+    
     function Get_Device_Var ($id)
     {
         $dbObj = $this->load->database('default', TRUE);
         $dbObj->where('id', $id);   
-        return $dbObj->get('device_threshold')->result();
+        return $dbObj->get('device_threshold')->row();
     }
     
     function Get_Device_Type($dev_type, $var_name, $substation_id, $city_code, $county_code)
@@ -1625,13 +1599,6 @@ class MP_Xjdh extends CI_Model
     	$dbObj->select('data_id');
     	return $dbObj->get('device')->result();
     }
-    function Get_camera($data_id)
-    {
-    	$dbObj = $this->load->database('default', TRUE);
-    	$dbObj->where('device.data_id', $data_id);
-    	$dbObj->select('extra_para');
-    	return $dbObj->get('device')->row();
-    }
     
     function Get_spsList($dev_group)
     {
@@ -1708,7 +1675,7 @@ class MP_Xjdh extends CI_Model
                 $dbObj->where('model', $model);
             $dbObj->order_by('dev_group','ASC');
             $dbObj->order_by('name', 'ASC');
-            $dbObj->select('device.*,substation.city_code,room.substation_id');
+            $dbObj->select('device.*,substation.city_code');
             $ret = $dbObj->get('device')->result();
             //echo $dbObj->last_query();
             return $ret;
@@ -2227,18 +2194,6 @@ class MP_Xjdh extends CI_Model
     	$dbObj->set('confirm_datetime','now()', FALSE);
     	return $dbObj->update('alert_realtime');
     }
-    
-    function Get_All_Camera_By_CityCode($cityCode)
-    {
-        $dbObj = $this->load->database('default', TRUE);
-        $dbObj->join('room', 'device.room_id=room.id');
-        $dbObj->join('substation', 'room.substation_id=substation.id');
-        $dbObj->where('model','camera');
-        $dbObj->where('active', 1);
-        $dbObj->where('city_code', $cityCode);
-        $dbObj->select('device.data_id,device.name as dev_name,substation.name as substation_name');
-        return $dbObj->get('device')->result();
-    }
     function Block_Alert ($alert_id)
     {
         $dbObj = $this->load->database('default', TRUE);
@@ -2283,6 +2238,7 @@ class MP_Xjdh extends CI_Model
 	   	{
 	   		//smd device
 	   		$smdObj = $this->Get_SMD_Device_By_no($preObj->data_id);
+	   		var_dump($preObj->data_id).die;
 	   		if(count($smdObj) == 0)
 	   			return;
 	   		$dbObj->set('dev_name',$smdObj->name);
@@ -3099,7 +3055,7 @@ class MP_Xjdh extends CI_Model
 		if($id)
 			$dbObj->where("substation_id",$id);
 		$dbObj->distinct('newGrouping');
-		$dbObj->select('*');
+		$dbObj->select('newGrouping');
 		return $dbObj->get('stationimage')->result();
 	}
 	function get_Img($imgName = false){
@@ -3213,8 +3169,8 @@ class MP_Xjdh extends CI_Model
 	    }
 	    if(count($time_rangeArr) == 2)
 	    {
-	    	$dbObj->where('door_operate.added_datetime >=',$time_rangeArr[0]." 00:00:00");
-	    	$dbObj->where('door_operate.added_datetime <=',$time_rangeArr[1]." 23:59:59");
+	    	$dbObj->where('door_record.added_datetime >=',$time_rangeArr[0]." 00:00:00");
+	    	$dbObj->where('door_record.added_datetime <=',$time_rangeArr[1]." 23:59:59");
 	    }
 	    $dbObj->order_by('door_operate.id', 'desc');
 	    $dbObj->join("user a", "door_operate.user_id=a.id");
@@ -3251,8 +3207,8 @@ class MP_Xjdh extends CI_Model
 	    }
 	    if(count($time_rangeArr) == 2)
 	    {
-	    	$dbObj->where('door_operate.added_datetime >=',$time_rangeArr[0]." 00:00:00");
-	    	$dbObj->where('door_operate.added_datetime <=',$time_rangeArr[1]." 23:59:59");
+	    	$dbObj->where('door_record.added_datetime >=',$time_rangeArr[0]." 00:00:00");
+	    	$dbObj->where('door_record.added_datetime <=',$time_rangeArr[1]." 23:59:59");
 	    }
 	    $dbObj->order_by('door_operate.id', 'desc');
 	    $dbObj->join("user a", "door_operate.user_id=a.id");
@@ -3342,8 +3298,8 @@ class MP_Xjdh extends CI_Model
 		}		
 		if(count($time_rangeArr) == 2)
 		{
-			$dbObj->where('door_operate.added_datetime >=',$time_rangeArr[0]." 00:00:00");
-			$dbObj->where('door_operate.added_datetime <=',$time_rangeArr[1]." 23:59:59");
+			$dbObj->where('door_record.added_datetime >=',$time_rangeArr[0]." 00:00:00");
+			$dbObj->where('door_record.added_datetime <=',$time_rangeArr[1]." 23:59:59");
 		}
 		if ($selCity){
 			$dbObj->where('substation.city_code',$selCity);
@@ -3357,7 +3313,7 @@ class MP_Xjdh extends CI_Model
 		$dbObj->select("device.name,room.name as room_name,substation.city_code,substation.county_code,substation.name as substation_name,a.full_name,a.mobile,b.full_name as operator_name, b.mobile as operator_mobile,door_operate.desc, door_operate.added_datetime");
 		return $dbObj->get('door_operate', $size, $offset)->result();
 	}
-	function Get_Operate_Door_Count($user_id=false,$substationId = false, $roomId = false, $subName =false ,$cityCode =false, $countyCode =false, $time_rangeArr='', $selCity = false, $selCounty = false)
+	function Get_Operate_Door_Count($user_id=false,$substationId = false, $roomId = false, $subName =false ,$cityCode =false, $countyCode =false, $time_rangeArr='', $selCity = false, $gCounty)
 	{
 		$dbObj = $this->load->database('default', TRUE);
 		
@@ -3387,15 +3343,11 @@ class MP_Xjdh extends CI_Model
 		
 		if(count($time_rangeArr) == 2)
 		{
-			$dbObj->where('door_operate.added_datetime >=',$time_rangeArr[0]." 00:00:00");
-			$dbObj->where('door_operate.added_datetime <=',$time_rangeArr[1]." 23:59:59");
+			$dbObj->where('door_record.added_datetime >=',$time_rangeArr[0]." 00:00:00");
+			$dbObj->where('door_record.added_datetime <=',$time_rangeArr[1]." 23:59:59");
 		}
 		if ($selCity){
 			$dbObj->where('substation.city_code',$selCity);
-		}
-		
-		if ($selCounty){
-			$dbObj->where('substation.county_code',$selCounty);
 		}
 		$dbObj->order_by('door_operate.id', 'desc');
 		$dbObj->join("user a", "door_operate.user_id=a.id");
@@ -3405,7 +3357,7 @@ class MP_Xjdh extends CI_Model
 		$dbObj->join('substation', 'substation.id=room.substation_id');
 		return $dbObj->count_all_results("door_operate");
 	}
-	function Get_Door_Record_List($data_id=false,$user_id=false, $cityCode=false, $countyCode=false, $substationId=false, $roomId=false, $username='', $mobile='', $card='', $time_rangeArr='',  $size=20, $offset=0 ,$selCity= false,$selCounty = false)
+	function Get_Door_Record_List($data_id=false,$user_id=false, $cityCode=false, $countyCode=false, $substationId=false, $roomId=false, $username='', $mobile='', $card='', $time_rangeArr='',  $size=20, $offset=0 ,$selCity= false)
 	{
 	    $dbObj = $this->load->database('default', TRUE);
 	     if($data_id)
@@ -3442,9 +3394,6 @@ class MP_Xjdh extends CI_Model
 	    }
 	    if ($selCity){
 	    	$dbObj->where('substation.city_code',$selCity);
-	    }
-	    if ($selCounty){
-	    	$dbObj->where('substation.county_code',$selCounty);
 	    }
 	    if(count($time_rangeArr) == 2)
 	    {
@@ -3892,44 +3841,43 @@ class MP_Xjdh extends CI_Model
 	    {
 	        case "0":{
 	            //时	            
-	            //$operation[] = [ '$group' => [ '_id' => [ "Date"=>'$Date', "Time"=>'$Time'] , 
-	            $operation[] = [ '$group' => [ '_id' => [ "Date"=>'$Date', "Time"=>[ '$substr'=> ['$Time', 0, 2] ]] ,
-	                                'epa_sum' => ['$sum'=>'$epa'],
-	                                'epb_sum' => ['$sum'=>'$epb'],
-	                                'epc_sum' => ['$sum'=>'$epc'],
-	                                'ept_sum' => ['$sum'=>'$ept']
-	            ]];
+	            $operation[] = [ '$group' => [ '_id' => [ "Date"=>'$Date', "Time"=>'$Time'] , 
+	                                             'epa_sum' => ['$sum'=>'$epa'],
+	                                             'epb_sum' => ['$sum'=>'$epb'],
+	                                             'epc_sum' => ['$sum'=>'$epc'],
+	                                             'ept_sum' => ['$sum'=>'$ept']
+	                                           ]];
 	            $operation[] = [ '$sort' => [ '_id.Date' => 1, '_id.Time' =>1] ];	            
 	            break;
             }
 	        case "1":
 	            //日
 	            $operation[] = [ '$group' => [ '_id' => [ "Date"=>'$Date'] ,
-						            'epa_sum' => ['$sum'=>'$epa'],
-						            'epb_sum' => ['$sum'=>'$epb'],
-						            'epc_sum' => ['$sum'=>'$epc'],
-						            'ept_sum' => ['$sum'=>'$ept']
+	            'epa_sum' => ['$sum'=>'$epa'],
+	            'epb_sum' => ['$sum'=>'$epb'],
+	            'epc_sum' => ['$sum'=>'$epc'],
+	            'ept_sum' => ['$sum'=>'$ept']
 	            ]];
 	            $operation[] = [ '$sort' => [ '_id.Date' => 1] ];
 	            break;
 	        case "2":
 	            //月
 	            $operation[] = [ '$group' => [ '_id' => [ 'year' => [ '$substr'=> ['$Date', 0, 4] ],
-                                    'month' => [ '$substr'=> ['$Date',5,2] ]],
-                                    'epa_sum' => ['$sum'=>'$epa'],
-                                    'epb_sum' => ['$sum'=>'$epb'],
-                                    'epc_sum' => ['$sum'=>'$epc'],
-                                    'ept_sum' => ['$sum'=>'$ept']
+                                    	            'month' => [ '$substr'=> ['$Date',5,2] ]],
+                                    	            'epa_sum' => ['$sum'=>'$epa'],
+                                    	            'epb_sum' => ['$sum'=>'$epb'],
+                                    	            'epc_sum' => ['$sum'=>'$epc'],
+                                    	            'ept_sum' => ['$sum'=>'$ept']
 	            ]];
 	            $operation[] = [ '$sort' => [ '_id.year' => 1, '_id.month'=>1] ];
 	            break;
 	        case "3":
 	            //年
 	            $operation[] = [ '$group' => [ '_id' => [ 'year' => [ '$substr'=> ['$Date', 0, 4] ]],
-						            'epa_sum' => ['$sum'=>'$epa'],
-						            'epb_sum' => ['$sum'=>'$epb'],
-						            'epc_sum' => ['$sum'=>'$epc'],
-						            'ept_sum' => ['$sum'=>'$ept']
+	            'epa_sum' => ['$sum'=>'$epa'],
+	            'epb_sum' => ['$sum'=>'$epb'],
+	            'epc_sum' => ['$sum'=>'$epc'],
+	            'ept_sum' => ['$sum'=>'$ept']
 	            ]];
 	            $operation[] = [ '$sort' => [ '_id.year' => 1] ];
 	            break;
@@ -3939,87 +3887,173 @@ class MP_Xjdh extends CI_Model
 	            ]];
 	            break;
 	    }
-	    $docs = $this->mongo_db->aggregate("power302a",$operation);
+	    $docs = $this->mongo_db->aggregate("power302a_hourly_ec",$operation);
 	    return $docs;
 	}
 	
 	
-	function Get_Power302a_List($dataId = false,$startTime = false,$endTime = false,$offset = 0, $size = 0)
-	{
+	function Get_Power302a_List($dataId = false,$startTime = false,$endTime = false,$offset = 0, $size = 20){
 		if(!empty($startTime)){
-			$this->mongo_db->where_gte('Date', $startTime);
+			$this->mongo_db->where_gt('Date', $startTime);
 		}
 		if(!empty($endTime)){
-			$this->mongo_db->where_lte('Date', $endTime);
+			$this->mongo_db->where_lt('Date', $endTime);
 		}
 		$this->mongo_db->where("data_id",intval($dataId));
-		return $this->mongo_db->select('*')->offset($offset)->limit($size)->get("power302a");
+		return $this->mongo_db->select(array("data_id","pa","pb","pc","pt","uaRms","ubRms","ucRms","iaRms","ibRms","icRms","itRms","freq","eqa","eqb","eqc","eqt","Date","Time"))->offset($offset)->limit($size)->get("power302a");
 	}
 
-	function Get_Power302a_Count($dataId,$startTime = false,$endTime = false)
-	{
+	function Get_Power302a_Count($dataId,$startTime = false,$endTime = false){
+	    
 		if(!empty($startTime)){
-			$this->mongo_db->where_gte('Date', $startTime);
+			$this->mongo_db->where_gt('Date', $startTime);
 		}
 		if(!empty($endTime)){
-			$this->mongo_db->where_lte('Date', $endTime);
+			$this->mongo_db->where_lt('Date', $endTime);
 		}
 		$this->mongo_db->where('data_id',intval($dataId));
 		return $this->mongo_db->count('power302a');
 	}
-
-	function Get_Device_History_List($model = false,$dataId = false,$startTime = false,$endTime = false,$offset = 0, $size = 0)
-	{
+    
+	function Get_battery24_List($dataId = false,$startTime = false,$endTime = false,$offset = 0, $size = 20){
 		if(!empty($startTime)){
-			$this->mongo_db->where_gte('Date', $startTime);
+			$this->mongo_db->where_gt('Date', $startTime);
 		}
 		if(!empty($endTime)){
-			$this->mongo_db->where_lte('Date', $endTime);
+			$this->mongo_db->where_lt('Date', $endTime);
 		}
 		$this->mongo_db->where("data_id",intval($dataId));
-		if($model == "power_302a")
-			$model = 'power302a';
-		if($model =="battery_24")
-			$model = 'battery24';
-		if($model =="battery_32")
-			$model = 'battery32';
-		if($model =="battery24_voltage")
-			$model = 'Battery24Voltage';
-		if($model =="humid")
-			$model = 'HumidSensor';
-		if($model =="temperature")
-			$model = 'TemperatureSensor';
-		if($model == "water")
-			$model = 'WaterSensor';
-		if($model = 'motor_battery')
-			$model = 'MotorBatteryVoltage';
-		return $this->mongo_db->select('*')->offset($offset)->limit($size)->get($model);
+		return $this->mongo_db->select(array("Date","Time","data_id","battery_voltage","voltage","current","temperature"))->offset($offset)->limit($size)->get("battery24");
 	}
 	
-	function Get_Device_History_Count($model = false,$dataId,$startTime = false,$endTime = false)
-	{	 
+	function Get_battery32_List($dataId = false,$startTime = false,$endTime = false,$offset = 0, $size = 20){
 		if(!empty($startTime)){
-			$this->mongo_db->where_gte('Date', $startTime);
+			$this->mongo_db->where_gt('Date', $startTime);
 		}
 		if(!empty($endTime)){
-			$this->mongo_db->where_lte('Date', $endTime);
+			$this->mongo_db->where_lt('Date', $endTime);
+		}
+		$this->mongo_db->where("data_id",intval($dataId));
+		return $this->mongo_db->select(array("Date","Time","data_id","battery_voltage","voltage","current","temperature"))->offset($offset)->limit($size)->get("battery32");
+	}
+	
+	function Get_humid_List($dataId = false,$startTime = false,$endTime = false,$offset = 0, $size = 20){
+		if(!empty($startTime)){
+			$this->mongo_db->where_gt('Date', $startTime);
+		}
+		if(!empty($endTime)){
+			$this->mongo_db->where_lt('Date', $endTime);
+		}
+		$this->mongo_db->where("data_id",intval($dataId));
+		return $this->mongo_db->select(array("Date","Time","data_id","value"))->offset($offset)->limit($size)->get("HumidSensor");
+	}
+	
+	function Get_temperature_List($dataId = false,$startTime = false,$endTime = false,$offset = 0, $size = 20){
+		if(!empty($startTime)){
+			$this->mongo_db->where_gt('Date', $startTime);
+		}
+		if(!empty($endTime)){
+			$this->mongo_db->where_lt('Date', $endTime);
+		}
+		$this->mongo_db->where("data_id",intval($dataId));
+		return $this->mongo_db->select(array("Date","Time","data_id","value"))->offset($offset)->limit($size)->get("TemperatureSensor");
+	}
+	
+	function Get_water_List($dataId = false,$startTime = false,$endTime = false,$offset = 0, $size = 20){
+		if(!empty($startTime)){
+			$this->mongo_db->where_gt('Date', $startTime);
+		}
+		if(!empty($endTime)){
+			$this->mongo_db->where_lt('Date', $endTime);
+		}
+		$this->mongo_db->where("data_id",intval($dataId));
+		return $this->mongo_db->select(array("Date","Time","data_id","value"))->offset($offset)->limit($size)->get("WaterSensor");
+	}
+	
+	function Get_fresh_air_List($dataId = false,$startTime = false,$endTime = false,$offset = 0, $size = 20){
+		if(!empty($startTime)){
+			$this->mongo_db->where_gt('Date', $startTime);
+		}
+		if(!empty($endTime)){
+			$this->mongo_db->where_lt('Date', $endTime);
+		}
+		$this->mongo_db->where("data_id",intval($dataId));
+		return $this->mongo_db->select(array("Date","Time","data_id","temperature1","temperature2","temperature3","temperature4","temperature5","humidity1","humidity2","humidity3","humidity4"
+				,"humidity5","wind_temperature","wind_humidity","outside_temperature","outside_humidity","humidifier_current","average_temperature","average_humidity","reserve_60_42_1"
+				,"reserve_60_42_2","highest_temperature","runstate_alert","runstate_fan","runstate_r1","runstate_r2","runstate_r3","runstate_r4","runstate_drain","runstate_fill","runstate_pump"
+				,"runstate_ac","alert","setting_temperature","setting_humidity","high_temperature_alert","low_temperature_alert","high_humidity_alert","low_humidity_alert"))->offset($offset)->limit($size)->get("fresh_air");
+	}
+	
+	function Get_battery24_Count($dataId,$startTime = false,$endTime = false){
+		 
+		if(!empty($startTime)){
+			$this->mongo_db->where_gt('Date', $startTime);
+		}
+		if(!empty($endTime)){
+			$this->mongo_db->where_lt('Date', $endTime);
 		}
 		$this->mongo_db->where('data_id',intval($dataId));
-		if($model == "power_302a")
-			$model = 'power302a';
-		if($model =="battery_24")
-			$model = 'battery24';
-		if($model =="battery_32")
-			$model = 'battery32';
-		if($model =="battery24_voltage")
-			$model = 'Battery24Voltage';
-		if($model =="humid")
-			$model = 'HumidSensor';
-		if($model =="temperature")
-			$model = 'TemperatureSensor';
-		if($model == "water")
-			$model = 'WaterSensor';
-		return $this->mongo_db->count($model);
+		return $this->mongo_db->count('battery24');
+	}
+	
+	function Get_battery32_Count($dataId,$startTime = false,$endTime = false){
+			
+		if(!empty($startTime)){
+			$this->mongo_db->where_gt('Date', $startTime);
+		}
+		if(!empty($endTime)){
+			$this->mongo_db->where_lt('Date', $endTime);
+		}
+		$this->mongo_db->where('data_id',intval($dataId));
+		return $this->mongo_db->count('battery32');
+	}
+	
+	function Get_humid_Count($dataId,$startTime = false,$endTime = false){
+			
+		if(!empty($startTime)){
+			$this->mongo_db->where_gt('Date', $startTime);
+		}
+		if(!empty($endTime)){
+			$this->mongo_db->where_lt('Date', $endTime);
+		}
+		$this->mongo_db->where('data_id',intval($dataId));
+		return $this->mongo_db->count('HumidSensor');
+	}
+	
+	function Get_temperature_Count($dataId,$startTime = false,$endTime = false){
+			
+		if(!empty($startTime)){
+			$this->mongo_db->where_gt('Date', $startTime);
+		}
+		if(!empty($endTime)){
+			$this->mongo_db->where_lt('Date', $endTime);
+		}
+		$this->mongo_db->where('data_id',intval($dataId));
+		return $this->mongo_db->count('TemperatureSensor');
+	}
+	
+	function Get_water_Count($dataId,$startTime = false,$endTime = false){
+			
+		if(!empty($startTime)){
+			$this->mongo_db->where_gt('Date', $startTime);
+		}
+		if(!empty($endTime)){
+			$this->mongo_db->where_lt('Date', $endTime);
+		}
+		$this->mongo_db->where('data_id',intval($dataId));
+		return $this->mongo_db->count('WaterSensor');
+	}
+	
+	function Get_fresh_air_Count($dataId,$startTime = false,$endTime = false){
+			
+		if(!empty($startTime)){
+			$this->mongo_db->where_gt('Date', $startTime);
+		}
+		if(!empty($endTime)){
+			$this->mongo_db->where_lt('Date', $endTime);
+		}
+		$this->mongo_db->where('data_id',intval($dataId));
+		return $this->mongo_db->count('fresh_air');
 	}
 	
 	function Get_powermeter_history_LY(){
@@ -4366,13 +4400,12 @@ class MP_Xjdh extends CI_Model
     	$dbObj->set('state', $state);
     	return $dbObj->update('substation_network');
     }
-    function Save_PerForValue ($id, $substation_id, $value, $state)
+    function Save_PerForValue ($id, $substation_id, $value)
     {
     	$dbObj = $this->load->database('default', TRUE);
     	$dbObj->where('perfor_id', $id);
     	$dbObj->where('substation_id', $substation_id);
     	$dbObj->set('value', $value);
-    	$dbObj->set('state', $state);
     	return $dbObj->update('substation_perfor');
     }
     function Get_NetWork_Value ($substation_id, $network_id)
@@ -4640,158 +4673,66 @@ class MP_Xjdh extends CI_Model
     	$dbObj->select('id');
     	return $dbObj->get('user')->row();
     }
-    function Get_Device_Data_Id_List ($cityCode = false, $countyCode = false)
-    {
-    	$dbObj = $this->load->database('default', TRUE);
-    	$dbObj->join('room', 'room.id=device.room_id');
-    	$dbObj->join('substation', 'substation.id=room.substation_id');
-    	$dbObj->where('device.model', 'power_302a');
-    	if ($cityCode)
-    		$dbObj->where('substation.city_code', $cityCode);
-    	if ($countyCode)
-    		$dbObj->where('substation.county_code', $countyCode);
-    	$dbObj->select('device.data_id');
-    	return $dbObj->get('device')->result();
+
+    function get_user_fullname($id){
+        $dbObj = $this->load->database('default', TRUE);
+        $dbObj->where('id',$id);
+        $dbObj->select('full_name');
+        return $dbObj->get('user')->row()->full_name;
     }
-    function Count_power302a_ept($dataId = false,$startTime = false,$endTime = false)
-    {
-    	if(!empty($startTime)){
-    		$this->mongo_db->where_gte('Date', $startTime);
-    	}
-    	if(!empty($endTime)){
-    		$this->mongo_db->where_lte('Date', $endTime);
-    	}
-    	$this->mongo_db->where("data_id",intval($dataId));
-    	$this->mongo_db->max('ept', 'eptmax');
-    	$this->mongo_db->min('ept', 'eptmin');
-    	return $this->mongo_db->get("power302a")-row();
+
+    function get_device_name($data_id){
+        $dbObj = $this->load->database('default', TRUE);
+        $dbObj->where('data_id',$data_id);
+        $dbObj->select('name');
+        return $dbObj->get('device')->row()->name;
     }
-    
-    function Get_Camera_Motion_List($dataId = false,$startTime = false,$endTime = false,$offset = 0, $size = 20)
-    {
-    	if(!empty($startTime)){
-    		$this->mongo_db->where_gte('Date', $startTime);
-    	}
-    	if(!empty($endTime)){
-    		$this->mongo_db->where_lte('Date', $endTime);
-    	}
-        if($dataId){
-            $this->mongo_db->where("data_id",intval($dataId));
-        }
-    	return $this->mongo_db->select(array("data_id","Date","Time","FileName"))->offset($offset)->limit($size)->get("camera_motion");
+
+    function getArrangeByID($arrangeID){
+        $dbObj = $this->load->database('default', TRUE);
+        $dbObj->where('id',$arrangeID);
+        return $arrange = $dbObj->get('check_arrange')->row();
     }
-    
-    function Get_Room_Id_List($cityCode = false, $countyCode = false,$substationId = false, $roomId = false, $dataId = false)
-    {
-    	$dbObj = $this->load->database('default', TRUE);
-    	$dbObj->join('room', 'room.id=device.room_id');
-        $dbObj->join('substation', 'substation.id=room.substation_id');
-    	if ($dataId)
-    		$dbObj->where('device.data_id', $dataId);
-    	if ($cityCode)
-    		$dbObj->where('substation.city_code', $cityCode);
-    	if ($countyCode)
-    		$dbObj->where('substation.county_code', $countyCode);
-    	if ($substationId)
-    		$dbObj->where('substation.id', $substationId);
-    	if ($roomId)
-    		$dbObj->where('room.id', $roomId);
-    	$dbObj->select('substation.city_code,substation.county_code,substation.name as suname,room.name as room_name,room.id as room_id');
-    	return $dbObj->get('device')->row();
+
+    function Get_substation_info($subID){
+        $dbObj = $this->load->database('default', TRUE);
+        $dbObj->where('id',$subID);
+        return $arrange = $dbObj->get('substation')->row();
     }
-    
-    function Get_takeAlarm_dataId()
-    {
-    	$dbObj = $this->load->database('default', TRUE);
-    	$dbObj->where('status','unresolved');
-    	$dbObj->select('*');
-    	return $dbObj->get('pre_alert')->result();
-    	
+
+    function get_user_subs($userID){
+        $dbObj = $this->load->database('default', TRUE);
+        $dbObj->where('user_id',$userID);
+        return $arrange = $dbObj->get('check_arrange')->result();
     }
-    function Get_takeAlarm_List ($data_id = false,$cityCode = false, $countyCode = false, $substationId = false, $roomId = false, $devModel = false, $level = false,  $startDatetime = false,
-    		$endDatetime = false, $word = '',$lastId = false,$status = false,$getsignalName = false)
-    {
-    	$dbObj = $this->load->database('default', TRUE);
-    	
-        if(strlen($data_id)>6){
-        	$dbObj->join('device', 'pre_alert.data_id=device.data_id');
-    	    $dbObj->join('room', 'room.id=device.room_id');
-    	    $dbObj->join('substation', 'substation.id=room.substation_id');
-    	    if ($roomId)
-    	    	$dbObj->where('device.room_id', $roomId); 
+
+    /**
+     * @param null $arrangeID
+     * @param null $userID
+     * @param null $substationID
+     * @param null $status
+     * 获取安排信息
+     */
+    function getArrange($arrangeID=NULL,$userID=NULL,$substationID=NULL,$status=NULL){
+        $dbObj = $this->load->database('default', TRUE);
+
+        if(!is_null($arrangeID) && !is_null($userID) && !is_null($substationID) && !is_null($status)){
+            $dbObj->where('id',$arrangeID);
+            return $res = $dbObj->get('check_arrange')->row();
         }else{
-        	$dbObj->join('smd_device', 'pre_alert.data_id=smd_device.device_no');
-         	$dbObj->join('room', 'room.id=smd_device.room_id');
-         	$dbObj->join('substation', 'substation.id=room.substation_id');
-         	if ($roomId)
-         		$dbObj->where('smd_device.room_id', $roomId);
-        }  
-        $dbObj->where('status','unresolved');
-        if ($level)
-        	$dbObj->where('pre_alert.level', $level);
-        if (strlen($data_id))
-        	$dbObj->where('pre_alert.data_id', $data_id);
-    	if ($getsignalName)
-    		$dbObj->where('pre_alert.signal_name', $getsignalName);
-    	if ($cityCode)
-    		$dbObj->where('substation.city_code', $cityCode);
-    	if ($countyCode)
-    		$dbObj->where('substation.county_code', $countyCode);
-    	if ($substationId)
-    		$dbObj->where('substation.id', $substationId);
-    	if ($devModel)
-    		$dbObj->where("model", $devModel);
-    	if ($startDatetime)
-            $dbObj->where('added_datetime >', $startDatetime . '00:00:00');
-    	if ($endDatetime)
-    	    $dbObj->where('added_datetime <', $endDatetime . '23:59:59');
-     	$dbObj->order_by('pre_alert.added_datetime', 'desc');
-    	if (strlen($data_id)>6){
-    		$dbObj->select('pre_alert.*,room.name as room_name,room.location as room_location,room.id as room_id,room.code as room_code,device.name as dev_name,device.model,substation.city_code,substation.county_code,substation.name as substation_name,substation.city,substation.county');
-    	}else{
-    		$dbObj->select('pre_alert.*,room.name as room_name,room.location as room_location,room.id as room_id,room.code as room_code,smd_device.name as dev_name,substation.city_code,substation.county_code,substation.name as substation_name,substation.city,substation.county,smd_device.device_no');
-    	}
-    	
-        return $dbObj->get('pre_alert')->row();
-  
+            if(!is_null($substationID)){
+                $dbObj->where('substaion_id',$substationID);
+            }
+            if(!is_null($userID)){
+                $dbObj->where('user_id',$userID);
+            }
+            if(!is_null($status)){
+                $dbObj->where('status',$status);
+            }
+        }
+        $res = $dbObj->get('check_arrange')->result();
+        return $res;
     }
-    
-    function Get_takeAlarm_SmdList ($smdIdArr = false,$cityCode = false, $countyCode = false, $substationId = false, $roomId = false, $devModel = false, $level = false,  $startDatetime = false,
-    		$endDatetime = false, $word = '',$lastId = false,$status = false,$getsignalName = false)
-    {   
-    	$dbObj = $this->load->database('default', TRUE);
-
-    	$dbObj->join('smd_device', 'pre_alert.data_id=smd_device.device_no');
-    	$dbObj->join('room', 'room.id=smd_device.room_id');
-    	$dbObj->join('substation', 'substation.id=room.substation_id');
-//     	if (is_array($smdIdArr))
-//     		$dbObj->where_in('pre_alert.id', $smdIdArr);
-//     	if ($roomId)
-//     		$dbObj->where('smd_device.room_id', $roomId);
-//     	if ($level)
-//     		$dbObj->where('pre_alert.level', $level);
-//     	if (strlen($data_id))
-//     		$dbObj->where('pre_alert.data_id', $data_id);
-//     	if($getsignalName)
-//     		$dbObj->where('pre_alert.signal_name', $getsignalName);
-//     	if ($cityCode)
-//     		$dbObj->where('substation.city_code', $cityCode);
-//     	if ($countyCode) 
-//     		$dbObj->where('substation.county_code', $countyCode);
-//     	if ($substationId)
-//     		$dbObj->where('substation.id', $substationId);
-//     	if($devModel)
-//     		$dbObj->where_in("model", $devModel);
-//     	if($startDatetime)
-//     		$dbObj->where('added_datetime >', $startDatetime . '00:00:00');
-//     	if($endDatetime)
-//     		$dbObj->where('added_datetime <', $endDatetime . '23:59:59');
-//     	$dbObj->order_by('pre_alert.added_datetime', 'desc');
-//     		$dbObj->select('pre_alert.*,room.name as room_name,room.location as room_location,room.id as room_id,room.code as room_code,smd_device.name as dev_name,substation.city_code,substation.county_code,substation.name as substation_name,substation.city,substation.county');
-    	return $dbObj->get('pre_alert')->result();
-    
-    }
-
     
     
     

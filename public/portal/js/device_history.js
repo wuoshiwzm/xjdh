@@ -75,35 +75,4 @@ $(document).ready(function(){
 //          $("#jsonDemo").jstree("toggle_node","#"+jQuery.data(data.rslt.obj[0], "id"));  
 //            }      
 //    })
-	var data_id = null;
-	var model = null;
-	$('.dev-info').click(function(){
-		data_id = $(this).attr('data_id');
-		model = $(this).attr('model');
-		$.get('/portal/gethistorydevdetail',{data_id:$(this).attr('data_id'),model:$(this).attr('model'),id:$(this).attr('id'),
-			startTime:$(this).attr('startTime'),endTime:$(this).attr('endTime')},function(data){
-			eval('var ret =' + data);
-			if(ret.ret == 0){
-				bootbox.dialog({
-					title:"详细信息",
-					message: ret.html,
-					buttons:{
-						OK:{
-							label : "确定",
-							className : "btn-info",
-							callback : function() {}
-						},
-						Cancel:{
-							label : "取消",
-							className : "btn",
-							callback : function() {}
-						}
-					},
-					onEscape: true
-				});
-			}
-		});
-	});
-		
-	
 });

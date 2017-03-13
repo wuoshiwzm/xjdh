@@ -85,7 +85,7 @@ $(document).ready(function(){
 							$('#bat_voltage2_'+ obj.data_id).find(' tbody>tr:eq('+1 +') td:eq(7)>span:eq(0)').html(obj.voltage[21] + 'V');
 							$('#bat_voltage2_'+ obj.data_id).find(' tbody>tr:eq('+1 +') td:eq(10)>span:eq(0)').html(obj.voltage[22] + 'V');
 					}
-                    if( type == "44i"){
+                                        if( type == "44i"){
 						        $('#bat_voltage_'+ obj.data_id).find(' tbody>tr:eq('+0 +') td:eq(1)>span:eq(0)').html(obj.voltage[0] + 'V');
 						        $('#bat_voltage_'+ obj.data_id).find(' tbody>tr:eq('+0 +') td:eq(4)>span:eq(0)').html(obj.voltage[1] + 'V');
 						        $('#bat_voltage_'+ obj.data_id).find(' tbody>tr:eq('+0 +') td:eq(7)>span:eq(0)').html(obj.voltage[2] + 'V');

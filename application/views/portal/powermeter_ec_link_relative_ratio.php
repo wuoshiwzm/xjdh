@@ -136,22 +136,20 @@
 							</div>
 						</form>
 					</div>
-					
-			<?php if($dataArray){ ?>		
 					<div class="widget-head bondi-blue">
 						<h3>查询结果</h3>
 					</div>
 					<div class="widget-container">
 					<div class="row-fluid">
-					   <div class='span12'>
+					   <div class='span3'>
 							<table class="table table-bordered responsive table-striped table-sortable">
 							     <thead>
 							         <tr>
     							         <th>时间</th>
     							         <?php foreach($ecType as $type){ ?>
     							         <th><?php echo Defines::$gECType[$type]; ?>能耗</th>
-    							         <th>环比增长率</th>
-    							         <?php } ?> 							         
+    							         <?php } ?>
+    							         
 							         </tr>
 							     </thead>
 							     <tbody>
@@ -160,36 +158,19 @@
 							             <td><?php echo $date; ?></td>
 							             <?php foreach($ecType as $type){ ?>
 							             <td><?php echo $ec[$type]; ?>度</td>
-							             <td><?php if($ec[$type."_ratio"]){
-                                                      echo $ec[$type."_ratio"];
-                                                   }else{
-                                                      echo "无环比增长率";
-                                                   }
-                                              ?></td>
 							             <?php } ?>
 							         </tr>
 							         <?php } ?>
 							     </tbody>
 							</table>
 						</div>
-					</div>
-				</div>
-		    <div class="widget-head bondi-blue">
-			   <h3>统计图</h3>
-			</div>
-			<div class="widget-container">
-				<div class="row-fluid">
-					<div class='span6'>
-						<div id="lineChart" style="height:400px;width:500px;"></div>    
-					</div>
-					<div class='span6'>  
-						<div id="eclineChart" style="height:400px;width:500px;"></div> 
+						<div class='span9'>
+						      <div id="lineChart" style="height:400px;width:100%;"></div>
+						      
+						</div>
 					</div>
 				</div>
 			</div>
-		<?php } ?>	
-			
-		</div>
 		</div>
 	</div>
 </div>
@@ -197,5 +178,4 @@
 <script type="text/javascript">
 var labelArray = <?php echo json_encode($labelArray); ?>;
 var dataArray = <?php echo json_encode($dataArray); ?>;
-var ecType = <?php echo json_encode($ecType); ?>;
 </script>

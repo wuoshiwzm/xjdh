@@ -68,7 +68,6 @@
 									<th>采集周期</th>
 									<th>输出设备</th>
 									<th>指标值</th>
-									<th>当前状态</th>
 									<th>操作</th>	
 								</tr>
 							</thead>
@@ -87,7 +86,6 @@
 									<td><?php echo htmlentities($perforObj->cycle,ENT_COMPAT,"UTF-8"); ?></td>
 									<td><?php echo htmlentities($perforObj->output_device,ENT_COMPAT,"UTF-8"); ?></td>
 									<td><?php echo htmlentities($perforObj->value,ENT_COMPAT,"UTF-8"); ?></td>
-									<td><?php echo htmlentities($perforObj->state,ENT_COMPAT,"UTF-8"); ?></td>
 									<td>
 										<button type="button"
 										class="btn btn-warning block-alert setting">添加指标值</button>

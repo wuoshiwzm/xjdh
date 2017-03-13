@@ -94,7 +94,7 @@ var door_id = <?php echo htmlentities($devObj->data_id,ENT_COMPAT,"UTF-8"); ?>;
 											<?php  if($cityCode == $cityKey){?> selected="selected"
 											<?php }?>><?php echo $cityVal;?>本地网</option>
     							        <?php }?>
-    							        <?php }else if($this->userObj->user_role == "city_admin"||$userObj->user_role == "operator"){ ?>
+    							        <?php }else if($this->userObj->user_role == "city_admin"){ ?>
     							        <option value="<?php echo $userObj->city_code; ?>">
     							            <?php echo Defines::$gCity[$userObj->city_code]; ?></option>
     							        <?php }?>
@@ -104,7 +104,7 @@ var door_id = <?php echo htmlentities($devObj->data_id,ENT_COMPAT,"UTF-8"); ?>;
 								<div class="controls" style="margin-left: 20px; float: left;">
 									<select class="chzn-select" data-placeholder="选择区域"
 										name='selCounty' id='selCounty'>
-										<?php if($this->userObj->user_role == "city_admin"||$userObj->user_role == "operator"){ ?>
+										<?php if($this->userObj->user_role == "city_admin"){ ?>
 											<option value="0">所有区域</option>
 											<?php foreach (Defines::$gCounty[$userObj->city_code] as $key=> $val){?>
 										    <option value='<?php echo $key;?>'

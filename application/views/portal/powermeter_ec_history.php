@@ -168,14 +168,15 @@
 							         if(isset($powerDataObj->_id["Date"])){
                                          echo htmlentities($powerDataObj->_id["Date"],ENT_COMPAT,"UTF-8");
 							             if(isset($powerDataObj->_id["Time"]))
-							                 echo " ".str_pad($curHour,2,$powerDataObj->_id["Time"],STR_PAD_LEFT).":00:00 - ".str_pad($curHour,2,($powerDataObj->_id["Time"]),STR_PAD_LEFT).":59:59"; 
+							                 echo " ".str_pad($curHour,2,$powerDataObj->_id["Time"],STR_PAD_LEFT).":00:00 - ".str_pad($curHour,2,($powerDataObj->_id["Time"]+1),STR_PAD_LEFT).":59:59"; 
 									 }else if(isset($powerDataObj->_id["year"])){
                                            echo $powerDataObj->_id["year"];
                                            if(isset($powerDataObj->_id["month"])){
                                                 echo "-".$powerDataObj->_id["month"];
                                             }
                                       }?></td>
-									<td><?php echo number_format($powerDataObj->epa_sum,2);?>度</td>
+									<td>
+									<?php echo number_format($powerDataObj->epa_sum,2);?>度</td>
 									<td><?php echo number_format($powerDataObj->epb_sum,2);?>度</td>
 									<td><?php echo number_format($powerDataObj->epc_sum,2);?>度</td>
 									<td><?php echo number_format($powerDataObj->ept_sum,2);?>度</td>

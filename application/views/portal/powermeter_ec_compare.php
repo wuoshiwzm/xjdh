@@ -37,7 +37,7 @@
 								<label class="control-label" style="float: left;">所属部门/分公司</label>
 								<div class="controls" style="margin-left: 20px; float: left;">
 									<select class="chzn-select selCity" data-placeholder="选择分公司"
-										name='selCity[]' id='selCity'>
+										name='selCity' id='selCity'>
 										<?php if($userObj->user_role == "admin"){?>
     							        <option value=''>全网</option>
     							        <?php foreach (Defines::$gCity as $cityKey=>$cityVal){?>
@@ -54,7 +54,7 @@
 								<label class="control-label" style="float: left;">区域</label>
 								<div class="controls" style="margin-left: 20px; float: left;">
 									<select class="chzn-select selCounty" data-placeholder="选择区域"
-										name='selCounty[]' id='selCounty'>
+										name='selCounty' id='selCounty'>
 										<?php if($userObj->user_role == "city_admin"||$userObj->user_role == "noc"){ ?>
 											<option value="0">所有区域</option>
 											<?php foreach (Defines::$gCounty[$userObj->city_code] as $key=> $val){?>
@@ -75,7 +75,7 @@
 								<label class="control-label" style="float: left;">所属局站</label>
 								<div class="controls" style="margin-left: 20px; float: left;">
 									<select class="chzn-select selSubstation" data-placeholder="选择局站"
-										name='selSubstation[]' id='selSubstation'>
+										name='selSubstation' id='selSubstation'>
 										<option value=''>所有局站</option>
 										<?php if(isset($substationId)) {?>
 									       <?php foreach ($substationList as $substationObj){?>
@@ -89,7 +89,7 @@
 								<label class="control-label" style="float: left;">所属机房</label>
 								<div class="controls" style="margin-left: 20px; float: left;">
 									<select class="chzn-select selRoom" data-placeholder="选择机房"
-										name='selRoom[]' id='selRoom'>
+										name='selRoom' id='selRoom'>
 										<option value=''>所有机房</option>
 										<?php if(isset($substationId)) {?>
 									    <?php foreach ($roomList as $roomListObj){?>
@@ -165,18 +165,12 @@
 							     </tbody>
 							</table>
 						</div>
+						<div class='span9'>
+						      <div id="lineChart" style="height:400px;width:100%;"></div>
+						      
+						</div>
 					</div>
 				</div>
-			<div class="widget-head bondi-blue">
-			   <h3>统计图</h3>
-			</div>
-			<div class="widget-container">
-                 <div class="row-fluid">
-                      <div class='span12'>
-                           <div id="lineChart" style="height:450px;width:800px;margin:0 auto;"></div>
-                      </div>
-                 </div>
-            </div>
 			</div>
 		</div>
 	</div>

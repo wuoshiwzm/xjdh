@@ -2,15 +2,15 @@
 <p>
   <?php if($_SESSION['XJTELEDH_USERROLE'] == 'admin'){?>
 	<button class='btn btn-info settings'
-		data_id='<?php echo $dataObj->data_id;?>'>动态设置</button>
+		data_id='<?php echo $psmAObj->data_id;?>'>动态设置</button>
   <?php }?>
   <button class='btn btn-info dev-info'
-		data_id='<?php echo $dataObj->data_id;?>'
-		model='<?php echo $dataObj->model;?>'>详细信息</button>
+		data_id='<?php echo $psmAObj->data_id;?>'
+		model='<?php echo $psmAObj->model;?>'>详细信息</button>
 </p>
 <table
 	class="table table-bordered responsive table-striped table-sortable"
-	id='table-<?php echo $dataObj->data_id;?>-dc'>
+	id='table-<?php echo $psmAObj->data_id;?>-dc'>
 	<thead>
 		<tr>
 			<th>序号</th>
@@ -23,13 +23,14 @@
 	</tbody>
 </table>
 <?php
-if ($dataObj->model == 'psma-ac') {
+
+if ($psmAObj->model == 'psma-ac') {
     $params = array('更新时间','A相输入电流','B相输入电流','C相输入电流','交流输入路数','交流切换状态','事故照明灯状态','当前工作路号','A相输入电流告警量','B相输入电流告警量','C相输入电流告警量');
     ?>
 
 <table
 	class="table table-bordered responsive table-striped table-sortable"
-	id='table-<?php echo $dataObj->data_id;?>-sps-ac-1'>
+	id='table-<?php echo $psmAObj->data_id;?>-sps-ac-1'>
 	<thead>
 		<tr>
 			<th>序号</th>
@@ -45,11 +46,11 @@ if ($dataObj->model == 'psma-ac') {
 	   <tr>
 			<td><?php echo $key + 1;?></td>
 			<td><?php echo $val;?></td>
-			<td id='sps-ac-<?php echo $dataObj->data_id.'-field'.$key;?>'></td>	       
+			<td id='sps-ac-<?php echo $psmAObj->data_id.'-field'.$key;?>'></td>	       
 			<?php if(!isset($isShowSettingField) || $isShowSettingField  ){?>
 	       <?php if($key > 0 && $key < 4){ ?>
 	       <td class="hasThreshold"><button
-					data_id='<?php echo $dataObj->data_id;?>'
+					data_id='<?php echo $psmAObj->data_id;?>'
 					field="<?php echo $key;?>" class="btn btn-warning setThreshold">设置告警规则</button></td>
 	       <?php }else{ ?>
 	       <td></td>
@@ -62,7 +63,7 @@ if ($dataObj->model == 'psma-ac') {
 <h4>交流输入各路当前状态</h4>
 <table
 	class="table table-bordered responsive table-striped table-sortable"
-	id='table-<?php echo $dataObj->data_id;?>-sps-ac-2'>
+	id='table-<?php echo $psmAObj->data_id;?>-sps-ac-2'>
 	<thead>
 		<tr>
 			<th>序号</th>
@@ -79,7 +80,7 @@ if ($dataObj->model == 'psma-ac') {
 <h4>交流输入各路告警状态</h4>
 <table
 	class="table table-bordered responsive table-striped table-sortable"
-	id='table-<?php echo $dataObj->data_id;?>-sps-ac-3'>
+	id='table-<?php echo $psmAObj->data_id;?>-sps-ac-3'>
 	<thead>
 		<tr>
 			<th>序号</th>
@@ -101,10 +102,10 @@ if ($dataObj->model == 'psma-ac') {
 
 	</tbody>
 </table>
-<?php }else if($dataObj->model == 'psma-rc'){ $params = array('更新时间','整流模块输出电压','整流模块数量');?>
+<?php }else if($psmAObj->model == 'psma-rc'){ $params = array('更新时间','整流模块输出电压','整流模块数量');?>
 <table
 	class="table table-bordered responsive table-striped table-sortable"
-	id='table-<?php echo $dataObj->data_id;?>-sps-rc-1'>
+	id='table-<?php echo $psmAObj->data_id;?>-sps-rc-1'>
 	<thead>
 		<tr>
 			<th>序号</th>
@@ -117,7 +118,7 @@ if ($dataObj->model == 'psma-ac') {
         <tr>
 			<td><?php echo $key + 1;?></td>
 			<td><?php echo $val;?></td>
-			<td id='sps-rc-<?php echo $dataObj->data_id.'-field'.$key;?>'></td>
+			<td id='sps-rc-<?php echo $psmAObj->data_id.'-field'.$key;?>'></td>
 		</tr>
     <?php }?>
 	</tbody>
@@ -125,7 +126,7 @@ if ($dataObj->model == 'psma-ac') {
 <h4>整流输入各路状态</h4>
 <table
 	class="table table-bordered responsive table-striped table-sortable"
-	id='table-<?php echo $dataObj->data_id;?>-sps-rc-2'>
+	id='table-<?php echo $psmAObj->data_id;?>-sps-rc-2'>
 	<thead>
 		<tr>
 			<th>序号</th>
@@ -147,7 +148,7 @@ if ($dataObj->model == 'psma-ac') {
 <h4>整流输入各路告警状态</h4>
 <table
 	class="table table-bordered responsive table-striped table-sortable"
-	id='table-<?php echo $dataObj->data_id;?>-sps-rc-3'>
+	id='table-<?php echo $psmAObj->data_id;?>-sps-rc-3'>
 	<thead>
 		<tr>
 			<th>序号</th>
@@ -164,12 +165,12 @@ if ($dataObj->model == 'psma-ac') {
 </table>
 <?php
     } else 
-        if ($dataObj->model == 'psma-dc') {
+        if ($psmAObj->model == 'psma-dc') {
             $params = array('更新时间','直流输出电压','总负载电流','蓄电池组数','监测直流分路电流数','直流电压告警','直流熔断丝数量','电池组1电压','电池组2电压','电池房温度','测点1温度','测点2温度');
             ?>
 <table
 	class="table table-bordered responsive table-striped table-sortable"
-	id='table-<?php echo $dataObj->data_id;?>-sps-dc-1'>
+	id='table-<?php echo $psmAObj->data_id;?>-sps-dc-1'>
 	<thead>
 		<tr>
 			<th>序号</th>
@@ -185,7 +186,7 @@ if ($dataObj->model == 'psma-ac') {
         <tr>
 			<td><?php echo $key+1;?></td>
 			<td><?php echo $val;?></td>
-			<td id='sps-dc-<?php echo $dataObj->data_id.'-field'.$key;?>'></td>
+			<td id='sps-dc-<?php echo $psmAObj->data_id.'-field'.$key;?>'></td>
 		</tr>
     <?php }?>
     </tbody>
@@ -193,7 +194,7 @@ if ($dataObj->model == 'psma-ac') {
 <h4>蓄电池组分路电流</h4>
 <table
 	class="table table-bordered responsive table-striped table-sortable"
-	id='table-<?php echo $dataObj->data_id;?>-sps-dc-2'>
+	id='table-<?php echo $psmAObj->data_id;?>-sps-dc-2'>
 	<tr>
 		<td>组一</td>
 		<td></td>
@@ -207,7 +208,7 @@ if ($dataObj->model == 'psma-ac') {
 <h4>蓄电池充、放电电流</h4>
 <table
 	class="table table-bordered responsive table-striped table-sortable"
-	id='table-<?php echo $dataObj->data_id;?>-sps-dc-3'>
+	id='table-<?php echo $psmAObj->data_id;?>-sps-dc-3'>
 	<tr>
 		<td>分路一</td>
 		<td></td>
@@ -228,7 +229,7 @@ if ($dataObj->model == 'psma-ac') {
 <h4>直流熔断丝告警</h4>
 <table
 	class="table table-bordered responsive table-striped table-sortable"
-	id='table-<?php echo $dataObj->data_id;?>-sps-dc-4'>
+	id='table-<?php echo $psmAObj->data_id;?>-sps-dc-4'>
 	<thead>
 		<tr>
 			<th>熔丝序号</th>
@@ -253,7 +254,7 @@ if ($dataObj->model == 'psma-ac') {
 <?php $params = array('电池组1熔丝断','电池组2熔丝断','电池组1充电过流','电池组2充电过流','电池组1保护','电池组2保护','二次下电','电池房过温','测点1过温','测点2过温','直流屏通讯中断','电池组1电压异常','电池组2电压异常');?>
 <table
 	class="table table-bordered responsive table-striped table-sortable"
-	id='table-<?php echo $dataObj->data_id;?>-sps-dc-5'>
+	id='table-<?php echo $psmAObj->data_id;?>-sps-dc-5'>
 	<thead>
 		<tr>
 			<th>序号</th>
@@ -266,7 +267,7 @@ if ($dataObj->model == 'psma-ac') {
         <tr>
 			<td><?php echo $key+1;?></td>
 			<td><?php echo $val;?></td>
-			<td id='sps-dc-alarm-<?php echo $dataObj->data_id.'-field'.$key?>'></td>
+			<td id='sps-dc-alarm-<?php echo $psmAObj->data_id.'-field'.$key?>'></td>
 		</tr>
         <?php }?>
     </tbody>

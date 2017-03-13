@@ -28,7 +28,7 @@
 			<div class='span12'>
 				<div class="tab-widget">
 					<ul class="nav nav-tabs">
-                	   <li><a href="/portal/door_user_list/<?php echo htmlentities($userObj->id,ENT_COMPAT,"UTF-8"); ?>"><i class="icon-tasks"></i>门禁管理</a></li>
+                	   <li><a href="/portal/door_user_list/<?php echo htmlentities($userObj->id,ENT_COMPAT,"UTF-8"); ?>"><i class="icon-tasks"></i>用户权限管理</a></li>
                 	   <li class="active"><a href="/portal/door_user_operate/<?php echo htmlentities($userObj->id,ENT_COMPAT,"UTF-8"); ?>"><i class="icon-tasks"></i>授权记录</a></li>
                 	   <li><a href="/portal/door_user_record/<?php echo htmlentities($userObj->id,ENT_COMPAT,"UTF-8"); ?>"><i class="icon-tasks"></i>开门记录</a></li>
 					</ul>
@@ -60,9 +60,9 @@
 											<?php  if($cityCode == $cityKey){?> selected="selected"
 											<?php }?>><?php echo $cityVal;?>本地网</option>
     							        <?php }?>
-    							        <?php }else if($this->userObj->user_role == "city_admin"||$this->userObj->user_role == "operator"){ ?>
+    							        <?php }else if($this->userObj->user_role == "city_admin"){ ?>
     							        <option value="<?php echo $userObj->city_code; ?>">
-    							            <?php echo Defines::$gCity[$this->userObj->city_code]; ?></option>
+    							            <?php echo Defines::$gCity[$userObj->city_code]; ?></option>
     							        <?php }?>
     								</select>
 								</div>
@@ -70,9 +70,9 @@
 								<div class="controls" style="margin-left: 20px; float: left;">
 									<select class="chzn-select" data-placeholder="选择区域"
 										name='selCounty' id='selCounty'>
-										<?php if($this->userObj->user_role == "city_admin"||$this->userObj->user_role == "operator"){ ?>
+										<?php if($this->userObj->user_role == "city_admin"){ ?>
 											<option value="0">所有区域</option>
-											<?php foreach (Defines::$gCounty[$this->userObj->city_code] as $key=> $val){?>
+											<?php foreach (Defines::$gCounty[$userObj->city_code] as $key=> $val){?>
 										    <option value='<?php echo $key;?>'
 												<?php if($countyCode == $key){?>selected="selected"<?php }?>>
 												<?php echo $val;?></option>

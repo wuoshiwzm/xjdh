@@ -1,6 +1,3 @@
-<script type="text/javascript">
-var parentcode = <?php echo json_encode($parentcode);?>;
-</script>
 <div class="main-wrapper">
 	<div class="container-fluid">
 		<div class="row-fluid ">

@@ -18,7 +18,7 @@ $(document).ready(function(){
 			var arr = document.getElementsByTagName('input');
 			for(var i = 0;i<arr.length;i++){
 				arr[i].onclick = function(){
-					if(this.id == "road" || this.id == "floor" || this.id == "satellite" )
+					if(this.id!="keyword" && this.id!="txtLnglat" && this.id!="Stationcode" && this.id!="txtName")
 						if(id){
 							window.location.href="/portal/editsubstation/"+id+"/"+this.id; 
 						}else{

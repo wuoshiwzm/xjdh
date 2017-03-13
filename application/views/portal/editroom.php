@@ -102,7 +102,32 @@ var substationList=<?php echo json_encode($substationList);?>;
 										value='<?php if(isset($roomObj)) echo htmlentities($roomObj->name, ENT_COMPAT, "UTF-8");?>' />
 								</div>
 							</div>
-
+							<div class="control-group">
+								
+								
+								<label class="control-label" style="float: left;">机房编码  <font size=4 color=red>&nbsp;*</font></label>
+								<div class="controls" style="margin-left: 20px; float: left;">
+									<input type='text' disabled="true" name='SubstationformatCode' id='SubstationformatCode' value="<?php echo htmlentities($roomObj->code, ENT_COMPAT, "UTF-8");?>"
+									 	/>
+								</div>	
+									<label class="control-label" style="float: left;" >机房位置<font size=4 color=red>&nbsp;&nbsp;</font></label>
+								<div class="controls" style="margin-left: 20px; float: left;">
+									<input type='text' name='txtLoc' id='txtLoc'
+										value='<?php if(isset($roomObj)) echo htmlentities($roomObj->location, ENT_COMPAT, "UTF-8");?>' />
+								</div>								
+							</div>
+							<div class="control-group">
+								<label class="control-label" style="float: left;">经度     <font size=4 color=red>&nbsp;&nbsp;</font></label>
+								<div class="controls" style="margin-left: 20px; float: left;">
+									<input type='text' name='txtLng' id='txtLng'
+										value='<?php if(isset($roomObj)) echo htmlentities($roomObj->lng, ENT_COMPAT, "UTF-8");?>' />
+								</div>
+								<label class="control-label" style="float: left;">维度     <font size=4 color=red>&nbsp;&nbsp;</font></label>
+								<div class="controls" style="margin-left: 20px; float: left;">
+									<input type='text' name='txtLat' id='txtLat'
+										value='<?php if(isset($roomObj)) echo htmlentities($roomObj->lat, ENT_COMPAT, "UTF-8");?>' />
+								</div>
+							</div>
 							<div class="form-actions">
 								<button class="btn btn-success" type="submit" id='btn-submit'>提交</button>
 							</div>

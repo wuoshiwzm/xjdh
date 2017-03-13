@@ -148,7 +148,7 @@ var areaTreeData = <?php echo json_encode($areaTreeData);?>;
 		<div class="modal-content">
 			<div class="modal-body modal-lg">
 				<h4>设置完毕，请点击"保存"按钮对所有修改进行保存</h4>
-				<p>阀值类型：上限：当采样值增加大于上限触发。下限：当采样值减少小于下限时触发。阀值：采样值等于阀值时候触发。</p>
+				<p>阀值类型：上限：当采样值增加大于上限触发。下限：当采样值减少小于下限时触发。阈值：采样值等于阀值时候触发。</p>
 				<div class="row-fluid">
 					<div class="span6">
 						<button type="button" class="btn btn-primary" id="btnAddRule">新建告警规则</button>
@@ -161,7 +161,7 @@ var areaTreeData = <?php echo json_encode($areaTreeData);?>;
 						<tr>
 							<th>序号</th>
 							<th>阀值类型</th>
-							<th>阀值</th>
+							<th>阈值</th>
 							<th>告警级别</th>
 							<th>信号名称</th>
 							<th>信号ID</th>

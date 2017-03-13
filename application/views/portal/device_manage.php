@@ -165,9 +165,10 @@ $(document).ready(function(){
 									<div class="controls" style="margin-left: 20px; float: left;">
 										<input type="text"  name='devgroup' id='devgroup' style="display: none;" <?php if($devgroup){?>
 										     value="" <?php }?>/>
-									</br><span class="help-block error" id='text1'   style="display: none;">注：请输入电源分组名，以区分交、直、整流屏电源。
+									</div>
+									<span class="help-block error" id='text1'   style="display: none;">
+											&nbsp;&nbsp;注：请输入电源分组名，以区分交、直、整流屏电源。
 									</span>
-									</div>	
 							</div>
 							<div  class="control-group">									
 							<label class="control-label" style="float: left;">关键词</label>
@@ -262,11 +263,9 @@ $(document).ready(function(){
 									<td>
 										<div class="btn-toolbar row-action">
 											<div class="btn-group">
-											<?php if($selModel != "venv"){?>
 												<a class="btn btn-info" style="height:18px;" href="/portal/edit_device/<?php echo htmlentities($devObj->data_id,ENT_COMPAT,"UTF-8");?>" >
 													<i class="icon-edit"></i>编辑
 												</a>
-											<?php }?>	
 												<button class="btn btn-white" data-original-title="添加白名单"
 													dataId='<?php echo htmlentities($devObj->data_id,ENT_COMPAT,"UTF-8");?>'>
 													<?php if(!isset($alertWhitelistObj)){?>
@@ -279,12 +278,10 @@ $(document).ready(function(){
 													<i class="icon-edit">添加白名单</i>
 													<?php }?>
 												</button>
-											<?php if($selModel != "venv"){?>
 												<button class="btn btn-danger delete-dev"
 													data-original-title="删除">
 													<i class="icon-remove"></i>
 												</button>
-											<?php }?>	
 											</div>
 										</div>
 									</td>

@@ -135,8 +135,6 @@
 							</div>
 						</form>
 					</div>
-					
-				<?php if($ecBasicList) {?>	
 					<div class="widget-head bondi-blue">
 						<h3>查询结果</h3>
 					</div>
@@ -158,89 +156,19 @@
 							         </tr>
 							         <?php } ?>
 							     </tbody>
-							</table >
+							</table>
 						</div>
-						
-						<?php for($year=$startYear;$year<=$endYear;$year++){ ?>
-						<div class='span3'>
-						<table class="table table-bordered responsive table-striped table-sortable">
-							     <thead>
-							         <tr>
-    							         <th>年度</th>
-    							         <th>月份</th>
-    							         <th>能耗</th>
-							         </tr>
-							     </thead>
-							     <tbody>
-							     <?php for($month=1;$month<=12; $month++){ ?>
-							         <tr>
-							             <td><?php echo $year; ?></td>
-							             <td><?php echo $month;?>月份</td>
-							             <td><?php echo $ecBasicArray[$year][$month];?></td>
-							         </tr>
-							      <?php } ?>							    
-							     </tbody>
-							</table>     
+						<div class='span9'>
+						      <div id="lineChart" style="height:400px;width:100%;"></div>
+						      
 						</div>
-						<?php }?>
-						
-						<?php if($endYear && $startYear){ ?>
-						<div class='span3'>
-						<table class="table table-bordered responsive table-striped table-sortable">
-							     <thead>
-							         <tr>
-    							         <th>年度</th>
-    							         <th>月份</th>
-    							         <th>同比</th>
-							         </tr>
-							     </thead>
-							     <tbody>
-							     <?php for($month=1;$month<=12; $month++){ ?>
-							         <tr>
-							             <td><?php echo $startYear; ?>-<?php echo $endYear; ?></td>
-							             <td><?php echo $month;?>月份</td>
-							             <td><?php  
-							                 $endYearMonth = $ecBasicArray[$endYear][$month];
-							                 $startYearMonth = $ecBasicArray[$startYear][$month];
-							                 if($endYearMonth && $startYearMonth){
-							                 	$ecBasic = ($endYearMonth-$startYearMonth)/$startYearMonth*100;
-							                 }else{
-							                 	$ecBasic = "无同比增长率";
-							                 }
-							                 echo $ecBasic;
-							               ?></td>
-							         </tr>
-							      <?php } ?>							    
-							     </tbody>
-							</table>     
-						</div>
-						<?php }?>
 					</div>
 				</div>
 			</div>
-			<div class="widget-head bondi-blue">
-			   <h3>统计图</h3>
-			</div>
-			
-			<div class="widget-container">
-				<div class="row-fluid">
-					<div class='span6'>
-						<div id="lineChart" style="height:400px;width:500px;"></div>    
-					</div>
-					<div class='span6'>  
-						<div id="eclineChart" style="height:400px;width:500px;"></div> 
-					</div>
-				</div>
-			</div>
-	 <?php } ?>	
 		</div>
 	</div>
 </div>
 
 <script type="text/javascript">
 var yearData = <?php echo json_encode($yearArray); ?>;
-var ecBasicArray = <?php echo json_encode($ecBasicArray); ?>;
-var startYear = <?php echo json_encode($startYear); ?>;
-var endYear = <?php echo json_encode($endYear); ?>;
-var ecArray = <?php echo json_encode($ecArray); ?>;
 </script>

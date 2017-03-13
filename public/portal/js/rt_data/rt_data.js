@@ -10,7 +10,7 @@ $(document).ready(function() {
 	
 	function edit_click() {
 		var pTr = $(this).parents("tr:eq(0)");
-		var typeSel = $('<select style="width:auto;"><option value="">请选择</option><option value="lower">下限</option><option value="upper">上限</option><option value="value">阀值</option></select>');
+		var typeSel = $('<select style="width:auto;"><option value="">请选择</option><option value="lower">下限</option><option value="upper">上限</option><option value="value">阈值</option></select>');
 		pTr.find("td:eq(1)").empty().append(typeSel);
 		typeSel.val(pTr.data("t_type"));		
 		enable_edit(pTr.find("td:eq(2)"), "span");
@@ -50,7 +50,7 @@ $(document).ready(function() {
 			pTr.find("td:eq(1)").empty().text("上限");
 		}else if(t_type == "value")
 		{
-			pTr.find("td:eq(1)").empty().text("阀值");
+			pTr.find("td:eq(1)").empty().text("阈值");
 		}
 		
 		pTr.find("td:eq(2)").empty().text(t_value);
@@ -136,7 +136,7 @@ $(document).ready(function() {
 			pTr.find("td:eq(1)").empty().text("上限");
 		}else if(t_type == "value")
 		{
-			pTr.find("td:eq(1)").empty().text("阀值");
+			pTr.find("td:eq(1)").empty().text("阈值");
 		}
 		pTr.find("td:eq(2)").empty().text(t_value);
 		pTr.find("td:eq(3)").empty().text(t_signalname);
@@ -232,7 +232,7 @@ $(document).ready(function() {
 							pTr.find("td:eq(1)").empty().text("上限");
 						}else if(t_type == "value")
 						{
-							pTr.find("td:eq(1)").empty().text("阀值");
+							pTr.find("td:eq(1)").empty().text("阈值");
 						}
 						pTr.find("td:eq(2)").empty().text(t_value);
 						pTr.find("td:eq(3)").empty().text(t_signalname);
@@ -308,7 +308,7 @@ $(document).ready(function() {
 							pTr.find("td:eq(1)").empty().text("上限");
 						}else if(t_type == "value")
 						{
-							pTr.find("td:eq(1)").empty().text("阀值");
+							pTr.find("td:eq(1)").empty().text("阈值");
 						}
 						pTr.find("td:eq(2)").empty().text(t_value);
 						pTr.find("td:eq(3)").empty().text(t_signalname);
@@ -392,7 +392,7 @@ $(document).ready(function() {
 						pTr.find("td:eq(1)").empty().text("上限");
 					}else if(t_type == "value")
 					{
-						pTr.find("td:eq(1)").empty().text("阀值");
+						pTr.find("td:eq(1)").empty().text("阈值");
 					}
 					pTr.find("td:eq(2)").empty().text(t_value);
 					pTr.find("td:eq(3)").empty().text(t_signalname);
@@ -632,7 +632,7 @@ $(document).ready(function() {
 	$("#btnAddRule").click(function(){
 		var maxIndex = $("#tbRule tr").length + 1;
 		var tTr = $('<tr><td>' + maxIndex + '</td>\
-						 <td><select style="width:auto;"><option value="">请选择</option><option value="lower">下限</option><option value="upper">上限</option><option value="value">阀值</option></select></td>\
+						 <td><select style="width:auto;"><option value="">请选择</option><option value="lower">下限</option><option value="upper">上限</option><option value="value">阈值</option></select></td>\
 						 <td><input type="text"  class="span10"/></td>\
 						 <td><input type="text" class="span10" /></td>\
 				         <td><input type="text" class="span10" /></td>\

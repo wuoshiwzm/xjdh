@@ -52,10 +52,10 @@ var stationimg = <?php echo json_encode($stationimg); ?>;
     					   </div>
                 		<?php }?>
 							<div  class="control-group">								
-								<label class="control-label" style="float: left;">上传图片</label>
-								<div  id="new_up" class="controls" style="margin-left: 20px; float: left;">
-                                       
-								</div>	
+									<label class="control-label" style="float: left;">上传图片</label>
+									<div  id="new_up" class="controls" style="margin-left: 20px; float: left;">
+                                         
+									</div>	
 								
 								<label class="control-label" style="float: left;">新增分组：</label>
 								<div class="controls" style="margin-left: 20px; float: left;">
