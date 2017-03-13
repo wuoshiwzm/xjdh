@@ -33,4 +33,14 @@ $(document).ready(function(){
 			}
 		});
 	});
+	
+	
+	$(".scr").click(function(){
+		var data_id = $(this).attr('data_id');
+		$("#" + data_id + "-img").src="/portal/camera_screenshort/{data_id}?rnd=" + parseInt(Math.random()*1000);
+	});
+
+	
+	
+	
 });

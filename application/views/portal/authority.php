@@ -88,18 +88,19 @@
 										 <option value='' >所有角色</option>
 										 <?php }?>
 										 <option value="door_user" <?php if($userRole == "door_user"){?>selected="selected"<?php }?>>门禁用户</option>
+										 <option value="member" <?php if($userRole == "member"){?>selected="selected"<?php }?>>普通用户</option>
 										  <?php if($this->userObj->user_role == "city_admin"){?>
 										 <option value="operator" <?php if($userRole == "operator"){?>selected="selected"<?php }?>>门禁管理员</option>
-										 <option value="member" <?php if($userRole == "member"){?>selected="selected"<?php }?>> 普通用户</option><?php }?>
+										 <option value="member" <?php if($userRole == "member"){?>selected="selected"<?php }?>>普通用户</option><?php }?>
 									    <?php }?>
 									    <?php if($this->userObj->user_role == "admin"){?>
 										 <option value='' >所有角色</option>
-										 <option value="admin" <?php if($userRole == "admin"){?>selected="selected"<?php }?>> 系统管理员 </option>
-										 <option value="member" <?php if($userRole == "member"){?>selected="selected"<?php }?>> 普通用户 </option>
-										 <option value="city_admin" <?php if($userRole == "city_admin"){?>selected="selected"<?php }?>> 分公司管理员 </option>
-										 <option value="noc" <?php if($userRole == "noc"){?>selected="selected"<?php }?>> 网络监控用户 </option>
-										 <option value="operator" <?php if($userRole == "operator"){?>selected="selected"<?php }?>> 门禁管理员  </option>
-										 <option value="door_user" <?php if($userRole == "door_user"){?>selected="selected"<?php }?>> 门禁用户 </option>
+										 <option value="admin" <?php if($userRole == "admin"){?>selected="selected"<?php }?>>系统管理员 </option>
+										 <option value="member" <?php if($userRole == "member"){?>selected="selected"<?php }?>>普通用户 </option>
+										 <option value="city_admin" <?php if($userRole == "city_admin"){?>selected="selected"<?php }?>>分公司管理员 </option>
+										 <option value="noc" <?php if($userRole == "noc"){?>selected="selected"<?php }?>>网络监控用户 </option>
+										 <option value="operator" <?php if($userRole == "operator"){?>selected="selected"<?php }?>>门禁管理员  </option>
+										 <option value="door_user" <?php if($userRole == "door_user"){?>selected="selected"<?php }?>>门禁用户 </option>
 										 <?php }?>	
 									</select>
 								</div>	</div>		

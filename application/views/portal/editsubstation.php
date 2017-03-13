@@ -137,12 +137,12 @@ var layer = <?php echo json_encode($layer); ?>;
 								</div>																
 							</div>
 							<div class="control-group">
-							<label class="control-label" style="float: left;">局站名</label>
+							<label class="control-label" style="float: left;">局站名称</label>
 								<div class="controls" style="margin-left: 20px; float: left;">
 									<input type='text' name='txtName' id='txtName'
 										value='<?php if(isset($substation)) echo htmlentities($substation->name, ENT_COMPAT, "UTF-8");?>' />
 								</div>
-								<label class="control-label" style="float: left;">局站类型     <font size=4 color=red>&nbsp;*</font></label>
+								<label class="control-label" style="float: left;">局站类型 </label>
 								<div class="controls" style="margin-left: 20px; float: left;">
 									<select id="selType" name="selType">
 										<option value="A" <?php if(isset($substation) && $substation->type == "A") echo "selected"; ?>>A级局站</option>
@@ -151,15 +151,23 @@ var layer = <?php echo json_encode($layer); ?>;
 										<option value="D" <?php if(isset($substation) && $substation->type == "D") echo "selected"; ?>>D级局站</option>
 										<option value="D1" <?php if(isset($substation) && $substation->type == "D1") echo "selected"; ?>>D级局站-无线基站</option>
 									</select>
+									<font size=4 color=red>&nbsp;*</font>
 								</div>											
 							</div>
 						<div  class="control-group">
-						<label class="control-label" style="float: left;">经维度     <font size=4 color=red>&nbsp;&nbsp;</font></label>
+						<label class="control-label" style="float: left;">经纬度</label>
 								<div class="controls" style="margin-left: 20px; float: left;">
 									<input type='text' name='txtLnglat' id='txtLnglat'
 										value='<?php if(isset($substation)) echo htmlentities($substation->lng,ENT_COMPAT,"UTF-8") . ',' . htmlentities($substation->lat,ENT_COMPAT,"UTF-8");?>' />
-								</div>							
-							<label class="control-label" style="float: left;">局站编码</label>
+								</div>
+								<label class="control-label" style="float: left;">局站位置</label>
+									<div class="controls" style="margin-left: 20px; float: left;">
+										<input type='text' name='Sublocation' id='Sublocation'
+											value='<?php if(isset($substation)) echo htmlentities($substation->location, ENT_COMPAT, "UTF-8");?>' /> 
+									</div>							
+							</div>
+							<div  class="control-group">
+							   <label class="control-label" style="float: left;">局站编码</label>
 									<div class="controls" style="margin-left: 20px; float: left;">
 										<input type='text' name='Stationcode' id='Stationcode'
 											value='<?php if(isset($substation)) echo substr($substation->Stationcode,-5);?>' /> </br><span style="color: red;">---局站编码为局站地址大写首字母缩写，最多为5位字母！</span>

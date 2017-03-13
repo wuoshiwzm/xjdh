@@ -134,12 +134,29 @@ class Oauth2 extends CI_Controller
             }
             // Validate User Info
             if (1 != User::ValidUser($this->input->post('user_id'), $this->input->post('password'), true)) {
-                $jsonRet = array();
-                $jsonRet['ret'] = 2;
-                $jsonRet['error'] = "incorrect user login info";
-                $jsonRet['response'] = '';
-                echo json_encode($jsonRet);
-                return;
+            	if(-4 == User::ValidUser($this->input->post('user_id'), $this->input->post('password'), true)){
+            		$jsonRet = array();
+            		$jsonRet['ret'] = 8;
+            		$jsonRet['error'] = "门禁用户不能登录网站";
+            		$jsonRet['response'] = '';
+            		echo json_encode($jsonRet);
+            		return;
+            	}else{
+            		$jsonRet = array();
+            		$jsonRet['ret'] = 2;
+            		$jsonRet['error'] = "incorrect user login info";
+            		$jsonRet['response'] = '';
+            		echo json_encode($jsonRet);
+            		return;
+            	}
+            }
+            if (4 == User::ValidUser($this->input->post('user_id'), $this->input->post('password'), true)) {
+            	$jsonRet = array();
+            	$jsonRet['ret'] = 8;
+            	$jsonRet['error'] = "23333333";
+            	$jsonRet['response'] = '';
+            	echo json_encode($jsonRet);
+            	return;
             }
             // validation pass, now issue the access token
             $user = User::GetUser($this->input->post('user_id'));

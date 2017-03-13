@@ -33,22 +33,5 @@ class MP_Master extends CI_Model
         $data['headerPlaceHolder'] = $headerPlaceHolder;
         $this->load->view('portal/master', $data);
     }
-
-    /**
-     * @param $mainPlaceHolder
-     * @param $headerPlaceHolder
-     * @param $pageTitle
-     * @param $data
-     * 显示无侧栏的页面
-     */
-    function Show_Pure ($mainPlaceHolder, $headerPlaceHolder, $pageTitle, $data)
-    {
-        $data['userObj'] = User::GetCurrentUser();
-        $data['siteName'] = $this->config->item('site_name');
-        $data['pageTitle'] = $pageTitle;
-        $data['mainPlaceHolder'] = $mainPlaceHolder;
-        $data['headerPlaceHolder'] = $headerPlaceHolder;
-        $this->load->view('portal/pure', $data);
-    }
 }
 ?>

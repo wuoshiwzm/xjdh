@@ -14,6 +14,7 @@ if (!defined('BASEPATH'))
 class Author
 {
 
+
     /**
      * @param $type 过滤权限的类型
      * 1: role 如'admin','noc';
@@ -53,20 +54,9 @@ class Author
 
         }
 
-        //4:check 审核工艺 / 调试设备
+        //4:check 审核工艺
         if ($type == 4) {
             $check = $_SESSION['XJTELEDH_CHECK'];
-            if (is_array($roleAllow) && in_array($roleApply, $roleAllow)) {
-                return true;
-            }
-            if (is_numeric($roleAllow) && ($roleApply == $roleAllow)) {
-                return true;
-            }
-            return false;
-        }
-
-        //4:check 安排督导
-        if ($type == 5) {
             if (is_array($roleAllow) && in_array($roleApply, $roleAllow)) {
                 return true;
             }

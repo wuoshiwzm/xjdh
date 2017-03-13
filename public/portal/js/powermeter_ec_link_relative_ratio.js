@@ -15,81 +15,108 @@ $(document).ready(function(){
             firstDay: 0
     	}
 	});
-	if(dataArray)
-	{
-	    var chartData = [
-	         			
-	                     ];
-		var seriesData = [];
-		for(var i=0;i < labelArray.length;i++)
-		{
-			seriesData[i] = [];
-		}
-		for(var obj in dataArray)
-		{
-			for(var i=0;i < dataArray[obj].length;i++)
-			{
-				var pointData = [];
-				pointData.push(obj);
-				pointData.push(dataArray[obj][i]);
-				seriesData[i].push(pointData);
-			}			
-		}
-		for(var i=0;i < labelArray.length;i++)
-		{
-			chartData.push(
-				{
-				    data: seriesData[i],
-				    label: labelArray[i],
-				    points: {
-				        show: true
-				    },
-				    lines: {
-				        show: true
-				    },
-				    yaxis: 2
-				});
-		}
-		
-		var options = {
-				series: {
-		            lines: {
-		                show: true,
-		                fill: false
-		            },
-		            points: {
-		                show: true,
-		                lineWidth: 2,
-		                fill: true,
-		                fillColor: "#ffffff",
-		                symbol: "circle",
-		                radius: 2,
-		            },
-		            shadowSize: 0,
-		        },
-		        grid: {
-		            hoverable: true,
-		            clickable: true,
-		            tickColor: "#f9f9f9",
-		            borderWidth: 1
-		        },
-		        colors: ["#b086c3", "#ea701b"],
-		        xaxis: {
-					mode: "categories"
-				},
-		        tooltip: true,
-		        tooltipOpts: {
-		            defaultTheme: false
-		        },
-		        legend: {
-		            position: 'nw',
-		            labelBoxBorderColor: "#000000",
-		            container: $("#area-chart #legendPlaceholderArea"),
-		            noColumns: 0
-		        }
-		    };
 	
-	    $.plot($("#lineChart"), chartData, options);
-	}
-    
+	
+    if(dataArray)
+    {
+    	var seriesData = []; var categories = [];
+        for(var i in ecType) 
+        {
+            seriesData[i] = [];
+            seriesData[i+"_ratio"] = [];
+            for(var data in dataArray)
+            {
+                categories.push(data);
+                for(var type in dataArray[data])
+                {
+                    if(i == type){
+                        seriesData[i].push(dataArray[data][type]);
+                    }else if(type == i+"_ratio"){
+                        seriesData[i+"_ratio"].push(dataArray[data][type]);
+                    }
+                }
+            }
+        }
+        var series = [];  var seriesEc = [];
+        for(var i in ecType)
+        {
+            var arr = {name : labelArray[i],data : seriesData[i]};
+            var arrEc = {name : labelArray[i],data : seriesData[i+"_ratio"]};
+            series.push(arr);
+            seriesEc.push(arrEc);
+        }
+    	
+        $(function () {
+            $('#lineChart').highcharts({
+                title: {
+                    text: '设备能耗折线图',
+                    x: -20
+                },
+                subtitle: {
+                    text: '',
+                    x: -20
+                },
+                xAxis: {
+                    categories: categories
+                },
+                yAxis: {
+                    title: {
+                        text: '能耗 (度)'
+                    },
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+                },
+                tooltip: {
+                    valueSuffix: '度'
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'middle',
+                    borderWidth: 0
+                },
+                series: series
+            });
+        });
+        $(function () {
+            $('#eclineChart').highcharts({
+                title: {
+                    text: '能耗环比折线图',
+                    x: -20
+                },
+                subtitle: {
+                    text: '',
+                    x: -20
+                },
+                xAxis: {
+                    categories: categories
+                },
+                yAxis: {
+                    title: {
+                        text: '环比增长率 (%)'
+                    },
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+                },
+                tooltip: {
+                    valueSuffix: '%'
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'middle',
+                    borderWidth: 0
+                },
+                series: seriesEc
+            });
+        });
+     }
+
+ 
 });

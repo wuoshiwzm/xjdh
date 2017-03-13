@@ -131,29 +131,29 @@
 							     <tbody>
 							         <tr>
 							             <td>市电进入</td>
-							             <td><?php echo $total; ?>度</td>
+							             <td><?php echo number_format($total,2);?>度</td>
 							         </tr>
 							         <tr>
 							             <td>主设备</td>
-							             <td><?php echo $main; ?>度</td>
+							             <td><?php echo number_format($main,2);?>度</td>
 							         </tr>
 							         <tr>
 							             <td>空调</td>
-							             <td><?php echo $air; ?>度</td>
+							             <td><?php echo number_format($air,2);?>度</td>
 							         </tr>
 							         <tr>
 							             <td>其他</td>
-							             <td><?php echo $other; ?>度</td>
+							             <td><?php echo number_format($other,2);?>度</td>
 							         </tr>
 							     </tbody>
 							</table>
 						</div>
 						<div class='span3'>
-						      <div id="pieChart" style="height:400px;width:400px;"></div>
+						      <div id="pieChart" style="height:350px;width:350px;"></div>
 						      
 						</div>
 						<div class="span3">
-						      <div id="barChart" style="height:400px;width:400px;"></div>
+						      <div id="barChart" style="height:350px;width:350px;"></div>
 						</div>
 					</div>
 				</div>

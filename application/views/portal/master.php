@@ -199,7 +199,7 @@
 						    <li><a class="bondi-blue" href="/portal/powermeter_ec_history"><i class="icon-key"></i><span>能耗历史数据查询</span></a></li>
 						    <li><a class="bondi-blue" href="/portal/powermeter_ec_struct"><i class="icon-key"></i><span>能耗结构图查询</span></a></li>
 						    <li><a class="bondi-blue" href="/portal/powermeter_ec_year_basis"><i class="icon-key"></i><span>能耗同比（趋势）查询</span></a></li>
-						    <li><a class="bondi-blue" href="/portal/powermeter_ec_link_relative_ratio"><i class="icon-key"></i><span>能耗同、环比查询</span></a></li>
+						    <li><a class="bondi-blue" href="/portal/powermeter_ec_link_relative_ratio"><i class="icon-key"></i><span>能耗环比（趋势）查询</span></a></li>
 						    <li><a class="bondi-blue" href="/portal/powermeter_ec_compare"><i class="icon-key"></i><span>能耗对比分析查询</span></a></li>
 							<li><a
 								class="bondi-blue" href="/portal/fluctuation"><i class="icon-key"></i><span>负载波动率</span>
@@ -272,11 +272,6 @@
 <!-- 								class="orange" href="/portal/camera_monitor"><i class="icon-lock"></i><span>视频监控中心</span> -->
 <!-- 							</a></li> -->
 							<?php } ?>
-							<?php if(User::IsUserHasPermission($userObj->id, "视频移动侦测记录")||in_array($userObj->user_role,array('operator','city_admin','admin'))) { ?>
-<!-- 							<li> <a -->
-<!-- 								class="dark-yellow" href="/portal/camear_motion"><i -->
-<!-- 									class="icon-lock"></i><span>视频移动侦测记录</span> </a></li> -->
-									<?php } ?>
                         </ul>
 					</div>
 					<?php } ?>
@@ -298,6 +293,14 @@
 						   <li><a class="orange"
 								href="<?php echo site_url("portal/door_report"); ?>"><i
 									class="icon-file-alt"></i><span> 门禁报表</span> </a></li>
+						   <?php if(User::IsUserHasPermission($userObj->id, "视频移动侦测记录")||in_array($userObj->user_role,array('operator','city_admin','admin'))) { ?>
+							<li> <a
+								class="dark-yellow" href="/portal/camera_motion"><i
+									class="icon-lock"></i><span>视频移动侦测记录</span> </a></li>
+							<?php } ?>
+							<li><a class="orange"
+								href="<?php echo site_url("portal/opendoor_report"); ?>"><i
+									class="icon-file-alt"></i><span>开门记录报表</span> </a></li>
 						</ul>
 					</div>
 					<div id="motor" class="tab-pane">
@@ -405,11 +408,22 @@
 							
 <!-- 							<li><a class="bondi-blue" href="/portal/device_pi_setting"><i -->
 <!-- 									class="icon-bookmark-empty"></i><span>性能指标设置</span></a></li> -->
+							       
+							<?php if($userObj->user_role=='admin'){?>
+							<li><a class="blue-violate"
+								href="<?php echo site_url("portal/basicdata/gSignal"); ?>"><i
+									class="icon-lightbulb"></i><span>信号量配置</span> </a></li>
+						    <li><a class="blue-violate"
+								href="<?php echo site_url("portal/basicdata/gDeviceSignalName"); ?>"><i
+									class="icon-lightbulb"></i><span>设备信号量配置</span> </a></li>
+							<?php }?>       
+							       
 						    <?php if($userObj->user_role=='admin'){?>
 							<li><a class="blue-violate"
 								href="<?php echo site_url("portal/spdev_manages"); ?>"><i
 									class="icon-lightbulb"></i><span>协议管理</span> </a></li>
 							<?php }?>	
+
 						</ul>
 					</div>
 					<?php if(User::IsUserHasFirst($userObj->id, "人员管理") || in_array($userObj->user_role,array('admin','city_admin','operator'))) { ?>
